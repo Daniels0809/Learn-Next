@@ -13,9 +13,6 @@ const geistMono = Geist_Mono({
 
 export default function Home() {
 
-  const product:string = "moto";
-
-  console.log(product);
 
   return (
     <div
