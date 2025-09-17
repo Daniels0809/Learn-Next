@@ -1,17 +1,12 @@
 @import "tailwindcss";
 
+/* === Root Variables === */
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* === Dark Mode Variables === */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -19,39 +14,102 @@
   }
 }
 
+/* === Custom Theme (using Tailwind @theme inline) === */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* === Global Styles === */
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
 }
 
-.miButton{
-  border-radius: 14px;
+/* === Button Style === */
+.miButton {
   padding: 10px;
-
+  margin: 10px;
+  border-radius: 14px;
+  background-color: #f3f3f3;
+  color: #171717;
+  transition: opacity 0.2s ease-in-out;
 }
 
-.miButton:hover{
+.miButton:hover {
   cursor: pointer;
-  opacity: .5;
+  opacity: 0.5;
 }
 
-.list{
-  gap: 10px;
+/* === List and Items === */
+.list {
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem;
 }
 
-.list-item{
+.list-item {
   width: 350px;
   height: 400px;
+  padding: 10px;
+  border-radius: 14px;
   background-color: bisque;
   color: #0a0a0a;
-  border-radius: 14px;
-  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.list-isActive{
+/* Optional class to display the list */
+.list-isActive {
   display: flex;
 }
+
+/* === Card-style Containers === */
+.moto,
+.vehiculos {
+  width: 200px;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 14px;
+  background-color: #f5f5f5;
+}
+
+/* === Input Styles === */
+input {
+  width: 200px;
+  padding: 10px;
+  margin: 10px;
+  margin-top: 10px;
+  border-radius: 14px;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #ccc;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input:focus {
+  outline: none;
+  border-color: #6366f1; /* Indigo Tailwind */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.login {
+  color: #000000;
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 16px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
