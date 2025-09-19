@@ -1,24 +1,21 @@
 export type CC= number;
 
 
-export interface Car {
-    motor:string;
-    color:string;
-    marca:string;
-    cc:CC;
-}
+// export interface Car {
+//     motor:string;
+//     color:string;
+//     marca:string;
+//     cc:CC;
+// }
 
-export interface User {
-    name:string;
-    age:string;
-    address:string;
-    cc:CC;
-}
+// export interface User {
+//     name:string;
+//     age:string;
+//     address:string;
+//     cc:CC;
+// }
 
-export interface user{
-    name:string;
-    age:number;
-}
+
 
 export interface Moto{
     name:string;

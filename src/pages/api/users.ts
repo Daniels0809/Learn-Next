@@ -11,10 +11,10 @@ type UsersResponse = {
   users : Users[]
 }
 
-export interface user{
-    name:string;
-    age:number;
-}
+// export interface user{
+//     name:string;
+//     age:number;
+// }
 
 export default function handler(
   req: NextApiRequest,

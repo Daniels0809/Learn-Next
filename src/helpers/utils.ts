@@ -15,13 +15,13 @@ const restar = (prop1:number, prop2:number) => {
 
 export const PI:number = 3.1416;
 
-export const users:user[] = [
-    {name: "daniel", age: 22},
-    {name: "daniel", age: 22},
-    {name: "daniel", age: 22},
-    {name: "daniel", age: 22},
-    {name: "daniel", age: 22},
-];
+// export const users:user[] = [
+//     {name: "daniel", age: 22},
+//     {name: "daniel", age: 22},
+//     {name: "daniel", age: 22},
+//     {name: "daniel", age: 22},
+//     {name: "daniel", age: 22},
+// ];
 
 
 
