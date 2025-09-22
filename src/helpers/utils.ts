@@ -1,5 +1,5 @@
 
-import {Moto, user, Usuario} from "../dto"
+import {Moto,  Usuario} from "../dto"
 
 const sumar = (prop1:number, prop2:number) => {
     return prop1 + prop2;
