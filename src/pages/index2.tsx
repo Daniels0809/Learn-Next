@@ -1,17 +1,17 @@
-  const [userList, setUserList] = useState<user[]>([]);
+  // const [userList, setUserList] = useState<user[]>([]);
 
-  const handleClick = async () => {
-    console.log("hola desde el front");
+  // const handleClick = async () => {
+  //   console.log("hola desde el front");
 
-    const userClass = new userServices();
+  //   const userClass = new userServices();
 
-    const users = userClass.getUsers();
+  //   const users = userClass.getUsers();
 
-    const response = await users;
-    const data = await response.json();
+  //   const response = await users;
+  //   const data = await response.json();
 
-    console.log(data);
-    setUserList(data.users);
+  //   console.log(data);
+  //   setUserList(data.users);
 
     // users
     //   .then((data) => data.json())
@@ -21,7 +21,7 @@
     //   });
 
     //llamar un metodo de mi clase user que es un servicio
-  };
+  // };
 
   // function identify<T>(parametro: T): T {
   //   return parametro;
