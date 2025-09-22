@@ -1,3 +1,116 @@
+  const [userList, setUserList] = useState<user[]>([]);
+
+  const handleClick = async () => {
+    console.log("hola desde el front");
+
+    const userClass = new userServices();
+
+    const users = userClass.getUsers();
+
+    const response = await users;
+    const data = await response.json();
+
+    console.log(data);
+    setUserList(data.users);
+
+    // users
+    //   .then((data) => data.json())
+    //   .then((response) => {
+    //     console.log(response.users);
+    //     setUserList(response.users)
+    //   });
+
+    //llamar un metodo de mi clase user que es un servicio
+  };
+
+  // function identify<T>(parametro: T): T {
+  //   return parametro;
+  // }
+
+  // const result = identify<number>(15);
+  // const result2 = identify<string>("A");
+  // const result3 = identify<boolean>(true);
+
+  // console.log(result);
+  // console.log(result2);
+  // console.log(result3);
+
+  // const arrayNum = [1, 2, 3, 4, 5, 6, 7];
+  // const arrayStr = ["A", "B", "C", "D", "E", "F"];
+  // const arrayBln = [true, false];
+
+  // const returnFirstElement = <T,>(array: T[]): T[] => {
+  //   array.forEach((element) => console.log(element))
+  //   console.log(array[array.length -1,1])
+  //   const reversed = array.reverse();
+  //   return reversed;
+  // };
+  // const resul = returnFirstElement<string>(arrayStr);
+  // const resul2 = returnFirstElement<number>(arrayNum);
+  // const resul3 = returnFirstElement<boolean>(arrayBln);
+
+  // console.log(resul);
+  // console.log(resul2);
+  // console.log(resul3);
+
+  
+
+  // const wrapIntripleArray = <T,>(i:T):T[] =>{
+  //   const agregacion = Array(3).fill(i)
+  //   return agregacion
+  // }
+
+  // const tripleNumber = wrapIntripleArray(5)
+  // console.log(tripleNumber);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //   class Vehiculo {
 //     name: string;
