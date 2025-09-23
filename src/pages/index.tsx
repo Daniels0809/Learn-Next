@@ -7,68 +7,44 @@
 // import { userServices } from "@/services/users";
 // import { useState } from "react";
 // import { user } from "./api/hello";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+import { MiButton } from "@/components/button/Button";
+import { notification } from "@/helpers/utils";
+import { ToastContainer } from "react-toastify";
 
 //crear un html con atributo onClick => llama funcion local del componente, puede ser llamdo handleClic, instancie una clase y use un metodo getUsers => previamente debe crear una clase dentro de una carpeta llamada services/users.ts, crea la clase, agrega un atributo con la base url, y crea metodos que llamen al backend con un fetch => el backend debe tener un handler que retorne algo
 
 export default function Home() {
+  const handleClickError = async () => {
+    notification("Sucedio un error", "error", 500);
+  };
   const handleClickSucces = async () => {
-    console.log("click");
-
-    toast.success("Iniciaste sesion correctamente", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-    });
+    notification("Iniciaste sesion correctamente", "success",1000);
   };
 
-  const handleClickError = async () => {
-    console.log("click");
-  
-    toast.error("Error al iniciar sesion", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-    //   style: {
-    //   background: "linear-gradient(to right, #E40303, #FF8C00, #FFED00, #008026, #004DFF, #750787)",
-    //   color: "white",
-    //   fontWeight: "bold",
-    // },
-      
-    });
+  const handleClickWarning = async () => {
+    notification("Cuidado!", "warning", 500);
+  };
+
+  const handleClickInfo = async () => {
+    notification("Boton info", "info",1000);
   };
 
   return (
     <>
       {/* <div>{Login()}</div> */}
 
-      <div>
-        <div>
-          <button className="miButton" onClick={handleClickSucces}>
-            Success!
-          </button>
-           
-        </div>
+      <div className="container ">
+          <button id="success" className="miButton" onClick={handleClickSucces}>Success!</button>
 
-        <div>
-          <button className="miButton" onClick={handleClickError}>
-            Error!
-          </button>
-          <ToastContainer />
-        </div>
+          <button id="error" className="miButton" onClick={handleClickError}>Error!</button>
 
+          <button id="warning" className="miButton" onClick={handleClickWarning}>Warning!</button>
+
+          <button id="info" className="miButton" onClick={handleClickInfo}>Info!</button>
+      <MiButton text={"Guardar"} icon={"S"}/>
+      <MiButton text={"Cancelar"} icon={"X"}/>
+      
+      <ToastContainer/>
         {/* <div>
           <div>Hola mundo</div>
 
