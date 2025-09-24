@@ -7,44 +7,69 @@
 // import { userServices } from "@/services/users";
 // import { useState } from "react";
 // import { user } from "./api/hello";
-import { MiButton } from "@/components/button/Button";
-import { notification } from "@/helpers/utils";
-import { ToastContainer } from "react-toastify";
-
+import { Card } from "@/card/Card";
+// import { MiButton } from "@/components/button/Button";
+// import { notification } from "@/helpers/utils";
+// import { ToastContainer } from "react-toastify";
 //crear un html con atributo onClick => llama funcion local del componente, puede ser llamdo handleClic, instancie una clase y use un metodo getUsers => previamente debe crear una clase dentro de una carpeta llamada services/users.ts, crea la clase, agrega un atributo con la base url, y crea metodos que llamen al backend con un fetch => el backend debe tener un handler que retorne algo
-
+import { PiArrowCircleUpRight, PiArrowCircleUpRightFill } from "react-icons/pi";
 export default function Home() {
-  const handleClickError = async () => {
-    notification("Sucedio un error", "error", 500);
-  };
-  const handleClickSucces = async () => {
-    notification("Iniciaste sesion correctamente", "success",1000);
-  };
+  // const handleClickError = async () => {
+  //   notification("Sucedio un error", "error", 500);
+  // };
+  // const handleClickSucces = async () => {
+  //   notification("Iniciaste sesion correctamente", "success", 1000);
+  // };
 
-  const handleClickWarning = async () => {
-    notification("Cuidado!", "warning", 500);
-  };
+  // const handleClickWarning = async () => {
+  //   notification("Cuidado!", "warning", 500);
+  // };
 
-  const handleClickInfo = async () => {
-    notification("Boton info", "info",1000);
-  };
+  // const handleClickInfo = async () => {
+  //   notification("Boton info", "info", 1000);
+  // };
 
   return (
     <>
       {/* <div>{Login()}</div> */}
+      <div className="Container">
 
-      <div className="container ">
-          <button id="success" className="miButton" onClick={handleClickSucces}>Success!</button>
+          <Card title={"Search engine optimization"} icon={<PiArrowCircleUpRightFill size={20} />} flecha={"#b9ff66"} text={"Learn more"} image={"/img/1.png"} color="gray" background="#B9FF66"/>
+          <Card title={"Pay-per-click advertising"}  icon={<PiArrowCircleUpRightFill size={20} />} text={"Learn more"} image={"/img/2.png"} color="green" background="#F3F3F3"/>
+          <Card title={"Social Media Marketing"} icon={<PiArrowCircleUpRightFill size={20} color="white"/>} text={"Learn more"} image={"/img/3.png"} color="blue" background="#F3F3F3" colorText={"#F3F3F3"}/>
+          <Card title={"Email Marketing"} icon={<PiArrowCircleUpRightFill size={20} />} text={"Learn more"} flecha={"#b9ff66"} image={"/img/4.png"} color="gray" background="#B9FF66"/>
+          <Card title={"Content Creation"}  icon={<PiArrowCircleUpRightFill size={20} />} text={"Learn more"} image={"/img/5.png"} color="green" background="#F3F3F3"/>
+          <Card title={"Analytics and Tracking"} icon={<PiArrowCircleUpRightFill size={20} color="white"/>} text={"Learn more"} image={"/img/6.png"} color="blue" background="#F3F3F3" colorText={"#F3F3F3"}/>
+      </div>        
+  
 
-          <button id="error" className="miButton" onClick={handleClickError}>Error!</button>
+      {/* <div className="container "> */}
 
-          <button id="warning" className="miButton" onClick={handleClickWarning}>Warning!</button>
 
-          <button id="info" className="miButton" onClick={handleClickInfo}>Info!</button>
-      <MiButton text={"Guardar"} icon={"S"}/>
-      <MiButton text={"Cancelar"} icon={"X"}/>
-      
-      <ToastContainer/>
+        {/* <button id="success" className="miButton" onClick={handleClickSucces}>
+          Success!
+        </button>
+
+        <button id="error" className="miButton" onClick={handleClickError}>
+          Error!
+        </button>
+
+        <button id="warning" className="miButton" onClick={handleClickWarning}>
+          Warning!
+        </button>
+
+        <button id="info" className="miButton" onClick={handleClickInfo}>
+          Info!
+        </button> */}
+
+        {/* <div className="flex gap-2">
+          <MiButton text={"Search engine optimization"} next="Learn More" icon={""} />
+          <MiButton text={"Pay-per-click advertising"} next="Learn More" icon={"X"} />
+          <MiButton text={"Social Media Marketing"} next="Learn More" icon={">>"} />
+          <MiButton text={"Email Marketing"} next="Learn More" icon={">>"} />
+        </div> */}
+
+        {/* <ToastContainer />
         {/* <div>
           <div>Hola mundo</div>
 
@@ -63,7 +88,7 @@ export default function Home() {
             })}
           </div>
         </div> */}
-      </div>
+      {/* </div> */}
     </>
   );
 }
