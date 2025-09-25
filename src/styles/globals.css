@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @import './components/card.css';
-
+@import './components/button.css';
 
 
 body {
@@ -114,16 +114,3 @@ input:focus {
 }
 
 
-.components--button{
-    padding: 5px;
-    border-radius: 14px;
-    background-color: rgb(33, 49, 197);
-    color: white;
-    border: 1px solid #f5f5f5;
-
-}
-
-.components--button:hover{
-  cursor: pointer;
-  opacity: .5;
-}
