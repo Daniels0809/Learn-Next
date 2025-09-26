@@ -7,6 +7,7 @@
 // import { userServices } from "@/services/users";
 // import { useState } from "react";
 // import { user } from "./api/hello";
+import { Badge } from "@/badge/Badge";
 import { Card } from "@/card/Card";
 import { MiButton } from "@/components/button/Button";
 import { notification } from "@/helpers/utils";
@@ -15,8 +16,11 @@ import { useState } from "react";
 // import { notification } from "@/helpers/utils";
 // import { ToastContainer } from "react-toastify";
 //crear un html con atributo onClick => llama funcion local del componente, puede ser llamdo handleClic, instancie una clase y use un metodo getUsers => previamente debe crear una clase dentro de una carpeta llamada services/users.ts, crea la clase, agrega un atributo con la base url, y crea metodos que llamen al backend con un fetch => el backend debe tener un handler que retorne algo
-import { PiArrowCircleUpRight, PiArrowCircleUpRightFill } from "react-icons/pi";
+
 import { ToastContainer } from "react-toastify";
+import { CgCheckO, CgCloseO, CgInfo } from "react-icons/cg";
+import { PiArrowCircleUpRightFill } from 'react-icons/pi';
+
 export default function Home() {
   // const handleClickError = async () => {
   //   notification("Sucedio un error", "error", 500);
@@ -53,16 +57,15 @@ export default function Home() {
   return (
     <>
       {/* <div>{Login()}</div> */}
-      {/* <div className="Container">
-
+      <div className="Container">
           <Card title={"Search engine optimization"} icon={<PiArrowCircleUpRightFill size={20} />} flecha={"#b9ff66"} text={"Learn more"} image={"/img/1.png"} color="gray" background="#B9FF66"/>
           <Card title={"Pay-per-click advertising"}  icon={<PiArrowCircleUpRightFill size={20} />} text={"Learn more"} image={"/img/2.png"} color="green" background="#F3F3F3"/>
           <Card title={"Social Media Marketing"} icon={<PiArrowCircleUpRightFill size={20} color="white"/>} text={"Learn more"} image={"/img/3.png"} color="blue" background="#F3F3F3" colorText={"#F3F3F3"}/>
           <Card title={"Email Marketing"} icon={<PiArrowCircleUpRightFill size={20} />} text={"Learn more"} flecha={"#b9ff66"} image={"/img/4.png"} color="gray" background="#B9FF66"/>
           <Card title={"Content Creation"}  icon={<PiArrowCircleUpRightFill size={20} />} text={"Learn more"} image={"/img/5.png"} color="green" background="#F3F3F3"/>
-          <Card title={"Analytics and Tracking"} icon={<PiArrowCircleUpRightFill size={20} color="white"/>} text={"Learn more"} image={"/img/6.png"} color="blue" background="#F3F3F3" colorText={"#F3F3F3"}/>
+          <Card title={"Analytics and Tracking"} BadgeComponent={<Badge label="Disponible" status="success" icon={<CgCheckO />} />} icon={<PiArrowCircleUpRightFill size={20} color="white"/>} text={"Learn more"} image={"/img/6.png"} color="blue" background="#F3F3F3" colorText={"#F3F3F3"}/>
       </div>        
-   */}
+  
 
       {/* <div className="container "> */}
 
@@ -83,10 +86,17 @@ export default function Home() {
           Info!
         </button> */}
 
+          <div className="flex gap-2">
+            <Badge label="Disponible" status="success" icon={<CgCheckO />} />
+            <Badge label="Agotado" status="warning" icon={<CgCloseO />}/>
+            <Badge label="Nuevo" status="info" icon={<CgInfo />}/>
+            <Badge label="Neutro" status="neutral" />
+          </div>
+
         <div className="flex gap-2">
-          <MiButton text={"cancelar"} icon={"!"} variant="danger" size="lg" />
-          <MiButton text={"guardar"} icon={"X"}  click={() => notification("un texto", "success")} variant="primary" size="md"/>
-          <MiButton text={"siguiente"} icon={">"} click={handlerClick} loading={loader} variant="secondary" size="sm"/>
+          <MiButton text={"cancelar"} letfIcon={"left"} rightIcon={"right"} variant="danger" size="lg" />
+          <MiButton text={"guardar"} letfIcon={"left"} rightIcon={"right"} click={() => notification("un texto", "success")} variant="primary" size="md"/>
+          <MiButton text={"siguiente"} letfIcon={"left"} rightIcon={"right"} click={handlerClick} loading={loader} variant="secondary" size="sm"/>
         </div>
 
          <ToastContainer />

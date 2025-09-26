@@ -1,6 +1,7 @@
 import React, { JSX } from "react";
 import Image from "next/image";
 
+
 interface CardProps {
   title: string;
   text: string;
@@ -10,10 +11,12 @@ interface CardProps {
   background: string;
   colorText?: string;
   flecha?: string;
+  BadgeComponent?: JSX.Element;
 }
 
-export const Card = ({ title, text, icon, image, color, background, colorText, flecha }: CardProps) => {
+export const Card = ({ title, text, icon, image, color, background, colorText, flecha, BadgeComponent }: CardProps) => {
   return (
+        
       <div
         className={
           color === "green"
@@ -27,6 +30,8 @@ export const Card = ({ title, text, icon, image, color, background, colorText, f
             : "card"
         } 
       >
+          {BadgeComponent}
+
         <div className="card__leftSide">
           <div className="card__leftSide--title"  style={{backgroundColor : background} }>{title}</div>
 
