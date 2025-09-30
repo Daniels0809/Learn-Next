@@ -23,7 +23,7 @@ export default function handler(
 const users  = [
   {name: "juan", age: 33},
   {name: "juana", age: 32},
-  {name: "juano", age: 16},
+  {name: "Daniel", age: 16},
 ]
 
 console.log("consele.log del lado del back")
