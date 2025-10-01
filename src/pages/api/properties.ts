@@ -1,8 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 // import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnection from '@/lib/dbconection';
-import Properties from '../../database/models/properties';
-
+import dbConnection from "@/lib/dbconection";
+import Properties from "../../database/models/properties";
 
 // type Users = {
 //   name: string;
@@ -23,15 +22,11 @@ import Properties from '../../database/models/properties';
 //   res: NextApiResponse<UsersResponse>,
 // ) {
 
-
-    
 // console.log("consele.log del lado del back")
 
 //   res.status(200).json({ properties: "funciona" });
 
-  
 // }
-
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -41,50 +36,75 @@ type Properties = {
 };
 
 interface Property {
-  _id: string;
-  name: string;
-  value: number;
+  ok: boolean;
+  message?: string;
+  _id?: string;
+  createId?: string;
+  name?: string;
+  value?: number;
   img?: string;
+  data?: Property[]; // Added data property to the interface
 }
-
-
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Property>,
+  res: NextApiResponse
 ) {
-
-
+  await dbConnection();
 
   try {
- 
-  if(req.method === 'GET'){
+    if (req.method === "GET") {
+      const data = await Properties.find();
+      console.log(data);
+      res.status(200).json({
+        ok: true,
+        data: data as Property[],
+      });
+    }
 
-    dbConnection();
-    const data = await Properties.find();
-    console.log("codigo de GET")
-    console.log(data)
-    res.status(200).json({ data: data});
+    if (req.method === "POST") {
+      const { name, value, img } = req.body;
+      const newProperty = new Properties({ name, value, img });
+      const savedProperty = await newProperty.save();
+      console.log(savedProperty);
+      return res.status(201).json({
+        ok: true,
+        message: "property saved",
+        createId: savedProperty._id,
+      });
+    }
+    if (req.method === "DELETE") {
+      const { id } = req.query;
+      console.log(id);
+      const propertyDelete = await Properties.findByIdAndDelete(id);
+      console.log(propertyDelete);
+      return res
+        .status(200)
+        .json({ ok: true, message: `Property deletec`, deletedId: `${id}` });
+    }
+    if (req.method === "PUT") {
+      const { id, name, value, img } = req.body;
+
+      try {
+        const propertyUpdate = await Properties.findByIdAndUpdate(id, {
+          name,
+          value,
+          img,
+
+        }, {new:true});
+        console.log(propertyUpdate);
+        
+        return res
+        .status(200)
+        .json({ ok: true, message: "property update", updatedId: id });
+      } catch {
+        res.status(400)
+      }
+
+      
+    }
+  } catch (err) {
+    res.status(500).json({ name: "fallo" });
+    console.log(err);
   }
-
-    if(req.method === 'POST'){
-    console.log("codigo de POST")
-    res.status(200).json({ _id: "" ,name: "funciona el POST", value: 0, img: "" });
-  }
-
-      if(req.method === 'PUT'){
-    console.log("codigo de PUT")
-    res.status(200).json({ _id: "funciona el PUT", name: "", value: 0, img: "" });
-  }
-
-      if(req.method === 'DELETE'){
-    console.log("codigo de DELETE")
-    res.status(200).json({ name: "funciona el DELETE", _id: "", value: 0, img: "" });
-  }
-
-}
-  catch (err) {
-    res.status(500).json({ _id: "error del servidor", name: "", value: 0, img: "" });
- }
-
 }

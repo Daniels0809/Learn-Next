@@ -1,31 +1,50 @@
 
-export class userServices {
 
-    url = 'http://localhost:3000/api/users';
 
-    // constructor(
 
-    // )
 
-    async getUsers(){
-        const result = await fetch(`${this.url}`);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export class userServices {
+
+//     url = 'http://localhost:3000/api/users';
+
+//     // constructor(
+
+//     // )
+
+//     async getUsers(){
+//         const result = await fetch(`${this.url}`);
         
 
 
-        return result
-    }
+//         return result
+//     }
 
-        async postUsers(){
+//         async postUsers(){
 
-        const result = await fetch(`${this.url}`,{
-            method:'post'
-            });
-
-
-        return result
-    }
+//         const result = await fetch(`${this.url}`,{
+//             method:'post'
+//             });
 
 
+//         return result
+//     }
 
-}
+
+
+// }
 
