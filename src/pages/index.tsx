@@ -6,7 +6,7 @@
 
 import { MiButton } from "@/components/button/Button";
 import { getProperties } from "@/services/properties";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // import { userServices } from "@/services/users";
 // import { useState } from "react";
@@ -41,9 +41,7 @@ export default function Home() {
   //   notification("Boton info", "info", 1000);
   // };
 
-
   // const [loader, setLoader] =  useState(false);
-
 
   //  const  handlerClick = () => {
   //   setLoader(true);
@@ -56,24 +54,69 @@ export default function Home() {
   // const handlerNot = () => {
   //   notification("hola", "success")
   // }
+  interface propertyProps {
+    _id: string;
+    name: string;
+    value: number;
+    img: string;
+  }
 
-const [properties, useProperties] = useState([])
+  interface dataProperties {
+    ok: boolean;
+    miInfo: propertyProps[];
+  }
 
+  // const handleSave = () => {
+  //consumir service
 
-const handleClick = async () => {
-  const response = await getProperties();
-  console.log(response)
+  //  createProperty({ //async
+  //       name: nameInput
+  //      value: valueInput
+  //      url: imgInput
+  //     })
+  //   }
+  const [dataProperties, setDataProperties] = useState([]);
 
-}
+  // const handleClick = async () => {
+  //   const response = await getProperties();
+  //   setDataProperties(response);
+  // };
 
+  useEffect(() => {
+    const fechData = async () => {
+      const response = await getProperties();
+      setDataProperties(response);
+    };
+    fechData();
+  }, []);
+
+  console.log(dataProperties.miInfo);
 
   return (
     <>
-    <div>
+      {" "}
       {/* <MiButton text={"llamar enpoint"} click={handleClick}/> */}
-      <button onClick={handleClick}>llamar enpoint</button>
-    </div>
+      {/* <button onClick={handleClick}>llamar enpoint</button> */}
+      {dataProperties.miInfo && (
+        <div>
+          {dataProperties.miInfo.map((property: propertyProps) => (
+            <div key={property._id}>
+              <div>{property.name}</div>
+              <div>{property.value}</div>
+              <img src={property.img} alt={property.name} />
+            </div>
+          ))}
+        </div>
+      )}
+      {/* <div>
+        <label htmlFor="">Ingresa usuario</label>
+        <input onChange={} />
+        <input onChange={} />
+        <input onChange={} />
 
+        <button onClick={handleSave}>guardar prop</button>
+        //agregar inputs name, value, url, cuando le de al boton coja la info y lo mande a traves de un service y llama el post que lo paso al body
+      </div> */}
       {/* <div>{Login()}</div> */}
       {/* <div className="Container">
           <Card title={"Search engine optimization"} icon={<PiArrowCircleUpRightFill size={20} />} flecha={"#b9ff66"} text={"Learn more"} image={"/img/1.png"} color="gray" background="#B9FF66"/>
@@ -83,12 +126,8 @@ const handleClick = async () => {
           <Card title={"Content Creation"}  icon={<PiArrowCircleUpRightFill size={20} />} text={"Learn more"} image={"/img/5.png"} color="green" background="#F3F3F3"/>
           <Card title={"Analytics and Tracking"} BadgeComponent={<Badge label="Disponible" status="success" icon={<CgCheckO />} />} icon={<PiArrowCircleUpRightFill size={20} color="white"/>} text={"Learn more"} image={"/img/6.png"} color="blue" background="#F3F3F3" colorText={"#F3F3F3"}/>
       </div>         */}
-  
-
       {/* <div className="container "> */}
-
-
-        {/* <button id="success" className="miButton" onClick={handleClickSucces}>
+      {/* <button id="success" className="miButton" onClick={handleClickSucces}>
           Success!
         </button>
 
@@ -103,8 +142,7 @@ const handleClick = async () => {
         <button id="info" className="miButton" onClick={handleClickInfo}>
           Info!
         </button> */}
-
-          {/* <div className="flex gap-2">
+      {/* <div className="flex gap-2">
             <Badge label="Disponible" status="success" icon={<CgCheckO />} />
             <Badge label="Agotado" status="warning" icon={<CgCloseO />}/>
             <Badge label="Nuevo" status="info" icon={<CgInfo />}/>
@@ -118,7 +156,7 @@ const handleClick = async () => {
         </div>
 
          <ToastContainer /> */}
-        {/* <div>
+      {/* <div>
         {
           <div>Hola mundo</div>
 

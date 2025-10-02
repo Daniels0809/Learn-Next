@@ -50,22 +50,27 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await dbConnection();
+   
+  dbConnection();
 
   try {
     if (req.method === "GET") {
       const data = await Properties.find();
+
       console.log(data);
       res.status(200).json({
         ok: true,
-        data: data as Property[],
+        miInfo: data as Property[],
       });
     }
 
     if (req.method === "POST") {
       const { name, value, img } = req.body;
+
       const newProperty = new Properties({ name, value, img });
+
       const savedProperty = await newProperty.save();
+
       console.log(savedProperty);
       return res.status(201).json({
         ok: true,

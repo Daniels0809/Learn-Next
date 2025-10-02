@@ -9,5 +9,14 @@ export const getProperties = async () => {
 }
 
 
+export const createProperty = async (name, value, img) => {
+
+    const response = await axios.post('http://localhost:3000/api/properties', {
+        name: name,
+        value: value,
+        img: img
+    } )
+}
+
 
 
