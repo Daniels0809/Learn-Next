@@ -15,7 +15,7 @@ const Dashboard = () => {
   // };
 
   const handleSave = () => {
-    createProperty(inputName, inputValue, inputImg);
+    createProperty(inputName, Number(inputValue), inputImg);
   };
 
   const router = useRouter();
@@ -24,6 +24,11 @@ const Dashboard = () => {
   if (router.route == "/dashboard") {
     console.log("estas en el dashboard");
   }
+
+    const handleEdit = () => {
+    router.push("/editProp");
+  };
+
 
   const goToBack = () => {
     router.back();
@@ -57,8 +62,12 @@ const Dashboard = () => {
         />
       </div>
 
-      <button className="miButton" onClick={goToBack}>
+
+      <button className="miButton bg-blue-400" onClick={goToBack}>
         Regresar
+      </button>
+      <button className="miButton bg-blue-400" onClick={handleEdit}>
+        Edit
       </button>
       <button className="miButton bg-blue-400" onClick={handleSave}>
         Guardar

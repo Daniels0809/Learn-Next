@@ -2,6 +2,9 @@
 @import './components/card.css';
 @import './components/button.css';
 @import './components/badge.css';
+@import './components/CrudContainer.css';
+
+
 
 body {
   background-color: var(--background);
@@ -111,6 +114,7 @@ input:focus {
 .container {
   display: flex;
   justify-content: center;
+  background-color: #5baaff;
 }
 
 

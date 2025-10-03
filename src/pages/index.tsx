@@ -24,6 +24,11 @@ import { useEffect, useState } from "react";
 // import { ToastContainer } from "react-toastify";
 // import { CgCheckO, CgCloseO, CgInfo } from "react-icons/cg";
 // import { PiArrowCircleUpRightFill } from 'react-icons/pi';
+import Layout from "../../.next/types/routes";
+import Dashboard from "./dashboard";
+import EditProp from "./EditProp";
+import { useRouter } from "next/router";
+import { TbBackground } from "react-icons/tb";
 
 export default function Home() {
   // const handleClickError = async () => {
@@ -75,12 +80,20 @@ export default function Home() {
   //      url: imgInput
   //     })
   //   }
-  const [dataProperties, setDataProperties] = useState([]);
+
+  const [dataProperties, setDataProperties] = useState<dataProperties>({
+    ok: false,
+    miInfo: [],
+  });
 
   // const handleClick = async () => {
   //   const response = await getProperties();
   //   setDataProperties(response);
   // };
+
+  
+  const [id, setId] = useState("");
+
 
   useEffect(() => {
     const fechData = async () => {
@@ -91,23 +104,58 @@ export default function Home() {
   }, []);
 
   console.log(dataProperties.miInfo);
+  const router = useRouter();
+
+  const handleEdit = (id:string) => {
+    setId(id)
+    console.log(id)
+    EditProp(id)
+    router.push("EditProp");
+  };
+
+  const handleCreate = () => {
+    router.push("dashboard");
+  };
 
   return (
     <>
       {" "}
       {/* <MiButton text={"llamar enpoint"} click={handleClick}/> */}
       {/* <button onClick={handleClick}>llamar enpoint</button> */}
-      {dataProperties.miInfo && (
-        <div>
-          {dataProperties.miInfo.map((property: propertyProps) => (
-            <div key={property._id}>
-              <div>{property.name}</div>
-              <div>{property.value}</div>
-              <img src={property.img} alt={property.name} />
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="CrudContainer">
+        {dataProperties.miInfo && (
+          <div>
+            {dataProperties.miInfo.map((property: propertyProps) => (
+              <div id={property._id} className="Property" key={property._id}>
+                <div>Nombre: {property.name}</div>
+                <div>Valor: {property.value}</div>
+                <img className="img" src={property.img} alt={property.name} />
+
+                  <div className="CrudButton">
+                    <button
+                      className="bg-blue-300 gap-10 miButton"
+                      onClick={handleCreate}
+                    >
+                      Agregar
+                    </button>
+                  </div>
+
+                  <div>
+                    <button
+                      className="bg-blue-300 gap-10 miButton"
+                      onClick={()=> handleEdit(property._id)}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+
+            ))}
+          </div>
+        )}
+      </div>
+
+      
       {/* <div>
         <label htmlFor="">Ingresa usuario</label>
         <input onChange={} />
