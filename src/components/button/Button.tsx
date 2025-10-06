@@ -2,7 +2,7 @@ import { JSX } from "react";
 
 interface MiButtonProps {
   text: string;
-  // icon: string | JSX.Element;
+  icon: string | JSX.Element;
   disabled?: boolean;
   loading?: boolean;
   click?: () => void;
@@ -12,26 +12,55 @@ interface MiButtonProps {
   rightIcon?: string | JSX.Element;
 }
 
-export const MiButton = ({text,disabled = false, loading = false, click, variant = "primary", size, letfIcon, rightIcon}: MiButtonProps) => {
-  
-
+export const MiButton = ({
+  text,
+  disabled = false,
+  loading = false,
+  click,
+  variant = "primary",
+  size,
+  letfIcon,
+  rightIcon,
+}: MiButtonProps) => {
   return (
-    <button
-      onClick={click}
-      className={`components__button ${
-        disabled || loading ? "components__button--disabled" : ""
-      } ${variant === "secondary" ? "components__button--secondary": variant === "danger" ? "components__button--danger": variant ? "components__button--primary" : ""  }` }
+    <div>
 
-      disabled={disabled || loading}
-    >
-      <div className="flex flex-row items-center gap-2">
-        <div>{letfIcon}</div>
-        <div className="flex flex-col gap-2" style={{fontSize: size === "sm" ? "12px" : size === "md" ? "20px" : size === "lg" ? "30px" : "16px"}}>
-          {loading ? "Cargando..." : text} 
+      <button
+        onClick={click}
+        className={`components__button ${
+          disabled || loading ? "components__button--disabled" : ""
+        } ${
+          variant === "secondary"
+            ? "components__button--secondary"
+            : variant === "danger"
+            ? "components__button--danger"
+            : variant
+            ? "components__button--primary"
+            : ""
+        }`}
+        disabled={disabled || loading}
+      >
+        <div className="flex flex-row items-center gap-2">
+          <div>{letfIcon}</div>
+          <div
+            className="flex flex-col gap-2"
+            style={{
+              fontSize:
+                size === "sm"
+                  ? "12px"
+                  : size === "md"
+                  ? "20px"
+                  : size === "lg"
+                  ? "30px"
+                  : "16px",
+            }}
+          >
+            {loading ? "Cargando..." : text}
+          </div>
+          <div>{rightIcon}</div>
         </div>
-        <div>{rightIcon}</div>
-      </div>
-    </button>
+      </button>
+    </div>
   );
 };
 
