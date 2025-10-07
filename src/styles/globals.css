@@ -3,7 +3,9 @@
 @import './components/button.css';
 @import './components/badge.css';
 @import './components/CrudContainer.css';
-
+@plugin './hero.ts';
+@source '../../node_modules/@heroui/theme/dist/**/.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
 
 
 body {

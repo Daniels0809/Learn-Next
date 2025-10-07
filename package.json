@@ -11,7 +11,9 @@
     "test:ci": "jest --coverage"
   },
   "dependencies": {
+    "@heroui/react": "^2.8.5",
     "axios": "^1.12.2",
+    "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
     "mongoose": "^8.18.3",
     "next": "15.5.2",

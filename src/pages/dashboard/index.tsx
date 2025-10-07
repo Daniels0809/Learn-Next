@@ -1,77 +1,32 @@
-import { createProperty } from "@/services/properties";
+import { MyContext } from "@/context/Context";
+import { Button, Switch } from "@heroui/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext } from "react";
 
 const Dashboard = () => {
-  const [inputName, setInputName] = useState("");
-  const [inputValue, setInputValue] = useState("");
-  const [inputImg, setInputImg] = useState("");
-
-  // const onChangeName = (e) => {
-  //   console.log(e.target.value);
-  //   setInputName(e.target.value);
-  //   setInputValue(e.target.value);
-  //   setInputImg(e.target.value);
-  // };
-
-  const handleSave = () => {
-    createProperty(inputName, Number(inputValue), inputImg);
-  };
-
   const router = useRouter();
-  console.log(router.route);
 
-  if (router.route == "/dashboard") {
-    console.log("estas en el dashboard");
-  }
+  const { userLogged, setIsActive, isActive } = useContext(MyContext);
 
-    const handleEdit = () => {
-    router.push("/editProp");
-  };
+  console.log(userLogged);
 
+  const handleClick = () => {
+    console.log(userLogged);
 
-  const goToBack = () => {
     router.back();
   };
 
   return (
     <>
-      <div>
-        <label htmlFor="">Nombre</label>
-        
-        <input
-          onChange={(e) => {
-            setInputName(e.target.value);
-          }}
-        />
-        <br />
-
-        <label htmlFor="">Valor</label>
-        <input
-          onChange={(e) => {
-            setInputValue(e.target.value);
-          }}
-        />{" "}
-        <br />
-
-        <label htmlFor="">Imagen</label>
-        <input
-          onChange={(e) => {
-            setInputImg(e.target.value);
-          }}
-        />
-      </div>
-
-
-      <button className="miButton bg-blue-400" onClick={goToBack}>
-        Regresar
-      </button>
-      <button className="miButton bg-blue-400" onClick={handleEdit}>
-        Edit
-      </button>
-      <button className="miButton bg-blue-400" onClick={handleSave}>
-        Guardar
-      </button>
+      <div>Este es el dashboard</div>
+      <div>El ususario {userLogged.name} esta logueado</div>
+      <Button onPress={handleClick} className="mt-7" color="danger">
+        regresar
+      </Button>
+      {isActive ? <div>Esta activo</div> : <div>Esta desactivado</div>}
+      <Switch isSelected={isActive} onValueChange={setIsActive}>
+        Airplane mode
+      </Switch>
     </>
   );
 };
