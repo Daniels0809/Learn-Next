@@ -28,6 +28,12 @@ export default function Home() {
       setIsActive(isActive);
       router.push("/dashboard");
     }
+    if (user === "daniel" && pass === "123") {
+      setUserLogged(userLogueado);
+      notification("login exitoso", "success");
+      setIsActive(isActive);
+      router.push("/form");
+    }
   };
 
   return (

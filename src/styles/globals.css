@@ -81,7 +81,8 @@ body {
 }
 
 /* === Input Styles === */
-input {
+
+/* input {
   width: 200px;
   padding: 10px;
   margin: 10px;
@@ -96,8 +97,8 @@ input {
 input:focus {
   outline: none;
   border-color: #6366f1; /* Indigo Tailwind */
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
+  /* box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+} */
 
 .login {
   color: #000000;
