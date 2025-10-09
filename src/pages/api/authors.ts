@@ -39,9 +39,9 @@ export default async function handler(
     }
 
     if (req.method === "POST") {
-      const { name, value, img } = req.body;
+      const { authorId,name, nationality, birthYear, isActive } = req.body;
 
-      const newAuthor = new Authors({ name, value, img });
+      const newAuthor = new Authors({ authorId, name, nationality, birthYear, isActive  });
 
       const savedAuthor = await newAuthor.save();
 

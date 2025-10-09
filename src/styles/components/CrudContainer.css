@@ -24,3 +24,19 @@
 }
 
 
+.authorContainer {
+    background-color: rgb(158, 160, 159);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.Author{
+      background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 200px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}

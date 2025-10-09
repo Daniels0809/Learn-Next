@@ -6,11 +6,14 @@ export const getAuthors = async () => {
     const response = await axios.get('http://localhost:3000/api/authors');
     console.log(response.data.data)
 
-    return response.data
+    return {
+        ok: response.data.ok,
+        datos: response.data.data
+    };
 }
 
 
-export const createAuthors = async ( name: string, nationality: string, birthYear: number, isActive: boolean ) => {
+export const createAuthor = async ( name: string, nationality: string, birthYear: number, isActive: boolean ) => {
 
     const response = await axios.post('http://localhost:3000/api/authors', {
         name: name,
@@ -23,24 +26,12 @@ export const createAuthors = async ( name: string, nationality: string, birthYea
 }
 
 
-export const editAuthors = async ( authorId:string, name: string, nationality: string, birthYear: number, isActive: boolean ) => {
-    
-    try{
-        const response = await axios.put(`http://localhost:3000/api/authors/${authorId}`, {
-        name: name,
-        nationality: nationality,
-        birthYear: birthYear,
-        isActive: isActive
-        
-    })
-    console.log('Response:', response.data)
-    }
-    catch(error)  {
-        console.log('Error: ',error)
-    }
+export const putAuthor = async (Author: {id:string;name:string;value:number;img:string}) => {
+    const response = await axios.put('http://localhost:3000/api/properties', Author);
+    return response.data
 }
 
-
-// export const deletedAuthors = async (authorId:string, name: string, nationality: string, birthYear: number, isActive: boolean){
-    
-// }
+export const deleteAuthor = async (authorId:string) => {
+    const response = await axios.delete(`http://localhost:3000/api/properties?id=${authorId}`);
+    return response.data
+}
