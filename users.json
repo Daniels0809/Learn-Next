@@ -1,0 +1,47 @@
+[
+  {
+    "userId": 1,
+    "name": "Daniel Ospina",
+    "email": "daniel@example.com",
+    "password": "123456",
+    "role": "admin",
+    "isActive": true,
+    "createdAt": "2025-10-08T00:00:00Z"
+  },
+  {
+    "userId": 2,
+    "name": "Laura Pérez",
+    "email": "laura@example.com",
+    "password": "654321",
+    "role": "user",
+    "isActive": true,
+    "createdAt": "2025-10-08T00:00:00Z"
+  },
+  {
+    "userId": 3,
+    "name": "Carlos Ramírez",
+    "email": "carlos@example.com",
+    "password": "abc123",
+    "role": "user",
+    "isActive": true,
+    "createdAt": "2025-10-08T00:00:00Z"
+  },
+  {
+    "userId": 4,
+    "name": "María Gómez",
+    "email": "maria@example.com",
+    "password": "maria2025",
+    "role": "user",
+    "isActive": true,
+    "createdAt": "2025-10-08T00:00:00Z"
+  },
+  {
+    "userId": 5,
+    "name": "Andrés Torres",
+    "email": "andres@example.com",
+    "password": "admin2025",
+    "role": "admin",
+    "isActive": true,
+    "createdAt": "2025-10-08T00:00:00Z"
+  }
+]

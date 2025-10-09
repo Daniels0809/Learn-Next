@@ -1,0 +1,52 @@
+[
+  {
+    "idBook": 1,
+    "title": "Cien años de soledad",
+    "authorId": 1,
+    "category": "Realismo mágico",
+    "publishedYear": 1967,
+    "availableCopies": 8,
+    "img": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f",
+    "createdAt": "2025-10-08T00:00:00Z"
+  },
+  {
+    "idBook": 2,
+    "title": "La casa de los espíritus",
+    "authorId": 2,
+    "category": "Ficción histórica",
+    "publishedYear": 1982,
+    "availableCopies": 5,
+    "img": "https://images.unsplash.com/photo-1528207776546-365bb710ee93",
+    "createdAt": "2025-10-08T00:00:00Z"
+  },
+  {
+    "idBook": 3,
+    "title": "La ciudad y los perros",
+    "authorId": 3,
+    "category": "Drama",
+    "publishedYear": 1963,
+    "availableCopies": 6,
+    "img": "https://images.unsplash.com/photo-1512820790803-83ca734da794",
+    "createdAt": "2025-10-08T00:00:00Z"
+  },
+  {
+    "idBook": 4,
+    "title": "Rayuela",
+    "authorId": 4,
+    "category": "Novela experimental",
+    "publishedYear": 1963,
+    "availableCopies": 4,
+    "img": "https://images.unsplash.com/photo-1507842217343-583bb7270b66",
+    "createdAt": "2025-10-08T00:00:00Z"
+  },
+  {
+    "idBook": 5,
+    "title": "Delirio",
+    "authorId": 5,
+    "category": "Ficción contemporánea",
+    "publishedYear": 2004,
+    "availableCopies": 7,
+    "img": "https://images.unsplash.com/photo-1473187983305-f615310e7daa",
+    "createdAt": "2025-10-08T00:00:00Z"
+  }
+]
