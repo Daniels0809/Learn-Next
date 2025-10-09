@@ -2,8 +2,6 @@ import { CardLibrary } from "@/cardLibrary/cardLibrary";
 import { getAuthors } from "@/services/authors";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-
-export const Authors = () => {
   interface authorProps {
     authorId: number;
     name: string;
@@ -16,6 +14,13 @@ export const Authors = () => {
     ok: boolean;
     datos: authorProps[];
   }
+
+export const Authors = () => {
+
+  const [inputNameAuthor, setNameAuthor] = useState("");
+  const [inputNationalityAuthor, setNationalityAuthor] = useState("");
+  const [inputBirthYear, setBirthYear ] = useState("");
+//   const [inputIsActiveAuthor, setIsActiveAuthor ] = useState("");
 
   const [dataAuthors, setDataAuthors] = useState<dataAuthors>({
     ok: false,
@@ -30,7 +35,7 @@ export const Authors = () => {
     fechData();
   }, []);
 
-  // console.log(dataAuthors.datos);
+  console.log(dataAuthors.datos);
 
   const router = useRouter();
 
@@ -39,7 +44,7 @@ export const Authors = () => {
   };
 
   const handleEdit = () => {};
-    
+
   return (
     <>
       <div>
@@ -69,6 +74,8 @@ export const Authors = () => {
           )}
         </div>
       </div>
+
+
     </>
   );
 };
