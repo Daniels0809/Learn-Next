@@ -1,7 +1,7 @@
 import { Schema, model, Model } from "mongoose";
 
 const authorsSchema = new Schema({
-    id:{
+    authorId:{
         type: Number
     },
     name: {
@@ -17,7 +17,6 @@ const authorsSchema = new Schema({
     isActive: {
         type: Boolean
     }
-
 
 });
 

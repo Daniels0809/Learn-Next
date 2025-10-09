@@ -112,12 +112,8 @@ export const FormularioUsuario: React.FC = () => {
 
       <Form
         className="w-full max-w-xs flex flex-col gap-4"
-        onReset={() => setAction("reset")}
       onSubmit={(e) => {
         e.preventDefault();
-        let data = Object.fromEntries(new FormData(e.currentTarget));
-
-        setAction(`submit ${JSON.stringify(data)}`);
       }}>
         <Input
           isRequired
