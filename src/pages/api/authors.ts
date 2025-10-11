@@ -28,6 +28,8 @@ export default async function handler(
   dbConnection();
 
   try {
+
+    //GET
     if (req.method === "GET") {
       const data = await Authors.find();
 
@@ -38,6 +40,7 @@ export default async function handler(
       });
     }
 
+    //CREATE
     if (req.method === "POST") {
       const { authorId,name, nationality, birthYear, isActive } = req.body;
 
@@ -52,30 +55,51 @@ export default async function handler(
         createId: savedAuthor._id,
       });
     }
+
+    //DELETE
     if (req.method === "DELETE") {
       const { id } = req.query;
-      console.log(id);
-      const authorDelete = await Authors.findByIdAndDelete(id);
-      console.log(authorDelete);
-      return res
-        .status(200)
-        .json({ ok: true, message: `author deleted`, deletedId: `${id}` });
+      if(!id || typeof id !== "string"){
+        return res.status(400).json({ok: false, message: "Missing of invalid id"})
+      }
+
+      try{
+        const deleted = await Authors.findByIdAndDelete(id);
+        // const deleted = await Authors.findOneAndDelete({authorId : Number(authorId)});
+
+        if(!deleted){
+          return res.status(404).json({ok: false, message: "Not found"});
+        }
+
+        return res.status(200).json({
+          ok:true,
+          message: `Author deleted`,
+          deletedId: id
+        });
+      }catch (error){
+        console.error("DELETE error:", error);
+        return res.status(500).json({ok: false, message: "Delete failed"});
+      }
     }
+
+
+    //UPDATE
     if (req.method === "PUT") {
-      const { id, name, value, img } = req.body;
+      const { _id, name, nationality, birthYear, isActive } = req.body;
 
       try {
-        const authorUpdate = await Authors.findByIdAndUpdate(id, {
+        const authorUpdate = await Authors.findByIdAndUpdate(_id, {
           name,
-          value,
-          img,
+          nationality,
+          birthYear,
+          isActive
 
         }, {new:true});
         console.log(authorUpdate);
         
         return res
         .status(200)
-        .json({ ok: true, message: "author update", updatedId: id });
+        .json({ ok: true, message: "author update", updatedId: _id });
       } catch {
         res.status(400)
       }

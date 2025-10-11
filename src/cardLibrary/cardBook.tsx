@@ -1,28 +1,35 @@
 import React from "react";
 
-interface CardProps {
-  authorId: number;
-  name: string;
-  nationality: string;
-  birthYear: number;
+interface CardBookProps {
+  idBook?: number;
   title?: string;
+  authorId?: number;
+  category?: string;
+  publishedYear?: number;
+  availableCopies?: number;
+  img?: string;
+  createdAt?: string;
   color?: string;
   background?: string;
   buttonText?: string;
-  onButtonClick: () => void;
+  onButtonClick?: () => void;
   onDelete?: () => void;
 }
 
-export const CardLibrary = ({
-  name,
-  nationality,
-  birthYear,
+export const CardBook = ({
+  idBook,
   title,
+  authorId,
+  category,
+  publishedYear,
+  availableCopies,
+  img,
+  createdAt,
   background,
   buttonText = "Edit",
   onButtonClick,
   onDelete,
-}: CardProps) => {
+}: CardBookProps) => {
   return (
     <div className="bg-gray-100 rounded-lg shadow-md p-4 mb-4 w-full max-w-md mx-auto">
       {/* Título */}
@@ -43,11 +50,16 @@ export const CardLibrary = ({
         </div>
       )}
 
-      <div className="text-gray-800 font-medium">Author: {name}</div>
+      <div className="text-gray-800 font-medium">Title: {title}</div>
 
+      <div>
+        {img}
+      </div>
       <div className="text-gray-600">
-        Nationality: {nationality} <br />
-        BirthYear: {birthYear}
+        category: {category} <br />
+        publishedYear: {publishedYear} <br />
+        availableCopies: {availableCopies} <br />
+        createdAt: {createdAt}
       </div>
 
       {/* Botón */}

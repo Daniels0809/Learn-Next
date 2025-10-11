@@ -25,9 +25,9 @@
 
 
 .authorContainer {
-    background-color: rgb(158, 160, 159);
+  background-color: rgb(158, 160, 159);
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas por fila */
   gap: 1.5rem;
   padding: 2rem;
 }
