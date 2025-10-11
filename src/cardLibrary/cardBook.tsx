@@ -1,25 +1,27 @@
+// src/cardLibrary/cardBook.tsx
 import React from "react";
+import Image from "next/image";
 
 interface CardBookProps {
+  _id?: string;
   idBook?: number;
   title?: string;
   authorId?: number;
+  authorName?: string;
   category?: string;
   publishedYear?: number;
   availableCopies?: number;
   img?: string;
   createdAt?: string;
-  color?: string;
   background?: string;
   buttonText?: string;
   onButtonClick?: () => void;
   onDelete?: () => void;
 }
 
-export const CardBook = ({
-  idBook,
+export const CardBook: React.FC<CardBookProps> = ({
   title,
-  authorId,
+  authorName,
   category,
   publishedYear,
   availableCopies,
@@ -29,7 +31,7 @@ export const CardBook = ({
   buttonText = "Edit",
   onButtonClick,
   onDelete,
-}: CardBookProps) => {
+}) => {
   return (
     <div className="bg-gray-100 rounded-lg shadow-md p-4 mb-4 w-full max-w-md mx-auto">
       {/* Título */}
@@ -50,19 +52,29 @@ export const CardBook = ({
         </div>
       )}
 
-      <div className="text-gray-800 font-medium">Title: {title}</div>
+      {/* Autor */}
+      {authorName && <div className="text-sm text-gray-500 mb-2">By: {authorName}</div>}
 
-      <div>
-        {img}
-      </div>
-      <div className="text-gray-600">
-        category: {category} <br />
-        publishedYear: {publishedYear} <br />
-        availableCopies: {availableCopies} <br />
-        createdAt: {createdAt}
+      {/* Imagen */}
+      <div className="mb-3">
+        {img ? (
+          // Si usas imágenes externas recuerda configurar domains en next.config.js
+          <Image alt={title ?? "book"} width={200} height={200} src={img} />
+        ) : (
+          <div className="w-[200px] h-[200px] bg-gray-300 flex items-center justify-center">
+            No image
+          </div>
+        )}
       </div>
 
-      {/* Botón */}
+      <div className="text-gray-600 text-sm">
+        <div>Category: {category}</div>
+        <div>Year: {publishedYear}</div>
+        <div>Copies: {availableCopies}</div>
+        <div>Created: {createdAt}</div>
+      </div>
+
+      {/* Botones */}
       <div className="mt-4 gap-2 flex">
         <button
           onClick={onButtonClick}
@@ -72,7 +84,7 @@ export const CardBook = ({
         </button>
         <button
           onClick={onDelete}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200"
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition duration-200"
         >
           Delete
         </button>
@@ -80,3 +92,5 @@ export const CardBook = ({
     </div>
   );
 };
+
+export default CardBook;

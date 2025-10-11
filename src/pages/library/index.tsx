@@ -17,14 +17,14 @@ interface authorProps {
 
 interface bookProps {
   _id?: string;
-  idBook: number,
-  title: string,
-  authorId: number,
-  category: string,
-  publishedYear: number,
-  availableCopies: number,
-  img: string,
-  createdAt: string
+  idBook: number;
+  title: string;
+  authorId: number;
+  category: string;
+  publishedYear: number;
+  availableCopies: number;
+  img: string;
+  createdAt: string;
 }
 
 interface dataAuthors {
@@ -37,12 +37,19 @@ interface dataBooks {
   datos: bookProps[];
 }
 
-export const Authors = () => {
-  // const [inputAuthorId, setAuthorId] = useState(0);
-  // const [inputNameAuthor, setNameAuthor] = useState("");
-  // const [inputNationalityAuthor, setNationalityAuthor] = useState("");
-  // const [inputBirthYear, setBirthYear] = useState(0);
-  // const [inputIsActiveAuthor, setIsActiveAuthor] = useState<boolean>(true);
+export const Library = () => {
+  const [dataAuthors, setDataAuthors] = useState<dataAuthors>({
+    ok: false,
+    datos: [],
+  });
+
+  const [dataBooks, setDataBooks] = useState<dataBooks>({
+    ok: false,
+    datos: [],
+  });
+
+  const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "edit" | "delete">(
@@ -79,7 +86,7 @@ export const Authors = () => {
     setDataAuthors(response);
   };
 
-    const handleDelete = async (id: string, author: authorProps) => {
+  const handleDelete = async (id: string, author: authorProps) => {
     try {
       setModalMode("delete");
       setSelectedAuthor(author);
@@ -126,7 +133,7 @@ export const Authors = () => {
           isActive: selectedAuthor.isActive,
         });
       }
-      if (modalMode === "delete"){
+      if (modalMode === "delete") {
         await deleteAuthor(selectedAuthor._id as string);
       }
 
@@ -138,35 +145,21 @@ export const Authors = () => {
       alert("There was an error while saving the author.");
     }
   };
-  const [dataAuthors, setDataAuthors] = useState<dataAuthors>({
-    ok: false,
-    datos: [],
-  });
 
-    const [dataBooks, setDataBooks] = useState<dataBooks>({
-    ok: false,
-    datos: [],
-  });
 
   useEffect(() => {
-  const fechData = async () => {
-    const response = await getBooks();
-    setDataBooks(response);
-  };
-  fechData();
-}, []);
-
-  useEffect(() => {
-  const fechData = async () => {
-    const response = await getAuthors();
-    setDataAuthors(response);
-  };
-  fechData();
-}, []);
+    const fechData = async () => {
+      const author = await getAuthors();
+      const books = await getBooks();
+       setDataAuthors(author);
+       setDataBooks(books)
+    };
+    fechData();
+  }, []);
 
   return (
     <>
-     <div>
+      <div>
         <div>
           {""}
           <div className="flex gap-1 ">
@@ -189,7 +182,6 @@ export const Authors = () => {
                   img={book.img}
                   createdAt={book.createdAt}
                   buttonText="Edit"
-                  
                 />
               ))}
             </div>
@@ -203,7 +195,13 @@ export const Authors = () => {
           setIsModalOpen(false);
         }}
         onSubmit={handleSubmitModal}
-        title={modalMode === "create" ? "Create Author" : modalMode == "edit"? "Edit Author" : "Delete Author"}
+        title={
+          modalMode === "create"
+            ? "Create Author"
+            : modalMode == "edit"
+            ? "Edit Author"
+            : "Delete Author"
+        }
         mode={modalMode}
         author={selectedAuthor}
         setAuthor={setSelectedAuthor}
@@ -244,7 +242,13 @@ export const Authors = () => {
           setIsModalOpen(false);
         }}
         onSubmit={handleSubmitModal}
-        title={modalMode === "create" ? "Create Auhtor" : modalMode == "edit"? "Edit Author" : "Delete Author"}
+        title={
+          modalMode === "create"
+            ? "Create Auhtor"
+            : modalMode == "edit"
+            ? "Edit Author"
+            : "Delete Author"
+        }
         mode={modalMode}
         author={selectedAuthor}
         setAuthor={setSelectedAuthor}
@@ -253,5 +257,4 @@ export const Authors = () => {
   );
 };
 
-export default Authors;
-
+export default Library;

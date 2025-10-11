@@ -4,7 +4,13 @@ const nextConfig: NextConfig = {
 images:{
   domains: [
     'fakestoreapi.com',
-    'example.com'
+    'example.com',
+    'www.estandarte.com',
+    'www.mejoreslibros.top',
+    'images.unsplash.com',
+    'blogger.googleusercontent.com',
+    'pendulo.com',
+    'm.media-amazon.com'
   ]
   },
 
