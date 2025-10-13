@@ -1,126 +1,259 @@
-// src/components/bookModal.tsx
 import React from "react";
 
-interface BookData {
+interface Author {
   _id?: string;
-  idBook: number | "";
-  title: string;
-  authorId: number | "";
-  category: string;
-  publishedYear: number | "";
-  availableCopies: number | "";
-  img: string;
-  createdAt: string;
+  authorId: number;
+  name: string;
+  nationality: string;
+  birthYear: number;
+  isActive: boolean;
 }
 
 interface BookModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: () => Promise<void> | void;
-  title: string;
+  onSubmit: () => void;
   mode: "create" | "edit" | "delete";
-  book: BookData;
-  setBook: React.Dispatch<React.SetStateAction<BookData>>;
+  book: {
+    idBook: number;
+    title: string;
+    authorId: number;
+    category: string;
+    publishedYear: number;
+    availableCopies: number;
+    img: string;
+    createdAt: string;
+    action?: string;
+  };
+
+  setBook: React.Dispatch<
+    React.SetStateAction<{
+      idBook: number;
+      title: string;
+      authorId: number;
+      category: string;
+      publishedYear: number;
+      availableCopies: number;
+      img: string;
+      createdAt: string;
+    }>
+  >;
+  authors: Author[];
 }
 
 export const BookModal: React.FC<BookModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  title,
   mode,
   book,
   setBook,
+  authors
 }) => {
   if (!isOpen) return null;
-
-  // Para inputs controlados, usar valores válidos ("" o número)
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="modal-content bg-gray-800 p-5 rounded-xl text-white w-full max-w-lg">
-        <h2 className="text-lg font-bold mb-4">{title}</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-4">Books</h2>
 
-        {mode !== "delete" && (
-          <div className="grid gap-2">
-            <input
-              type="number"
-              placeholder="Book ID"
-              value={book.idBook ?? ""}
-              onChange={(e) =>
-                setBook({ ...book, idBook: e.target.value === "" ? "" : Number(e.target.value) })
-              }
-            />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSubmit();
+          }}
+        >
+          {/* Book ID - Only in create mode */}
+          {mode === "create" && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">
+                Book ID
+              </label>
+              <input
+                type="number"
+                value={book.idBook}
+                onChange={(e) =>
+                  setBook({
+                    ...book,
+                    idBook: Number(e.target.value),
+                  })
+                }
+                className="mt-1 w-full border border-gray-300 rounded px-3 py-2"
+                placeholder="Book ID"
+              />
+            </div>
+          )}
+
+          {/* Name */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Title
+            </label>
             <input
               type="text"
-              placeholder="Title"
               value={book.title}
               onChange={(e) => setBook({ ...book, title: e.target.value })}
-            />
-            <input
-              type="number"
-              placeholder="Author ID"
-              value={book.authorId ?? ""}
-              onChange={(e) =>
-                setBook({ ...book, authorId: e.target.value === "" ? "" : Number(e.target.value) })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Category"
-              value={book.category}
-              onChange={(e) => setBook({ ...book, category: e.target.value })}
-            />
-            <input
-              type="number"
-              placeholder="Published Year"
-              value={book.publishedYear ?? ""}
-              onChange={(e) =>
-                setBook({
-                  ...book,
-                  publishedYear: e.target.value === "" ? "" : Number(e.target.value),
-                })
-              }
-            />
-            <input
-              type="number"
-              placeholder="Available Copies"
-              value={book.availableCopies ?? ""}
-              onChange={(e) =>
-                setBook({
-                  ...book,
-                  availableCopies: e.target.value === "" ? "" : Number(e.target.value),
-                })
-              }
-            />
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={book.img}
-              onChange={(e) => setBook({ ...book, img: e.target.value })}
+              className="mt-1 w-full border border-gray-300 rounded px-3 py-2"
+              placeholder="Book Title"
             />
           </div>
-        )}
 
-        {mode === "delete" && (
-          <p>
-            Are you sure you want to delete the book "<span className="font-semibold">{book.title}</span>"?
-          </p>
-        )}
+          {/* author id */}
+          {/* <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Author
+            </label>
+            <input
+              type="number"
+              value={book.authorId}
+              onChange={(e) =>
+                setBook({ ...book, authorId: Number(e.target.value) })
+              }
+              className="mt-1 w-full border border-gray-300 rounded px-3 py-2"
+              placeholder="Nationality"
+            />
+          </div> */}
+          {/* Author selector */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Author
+            </label>
+            <select
+              value={book.authorId}
+              onChange={(e) =>
+                setBook({ ...book, authorId: Number(e.target.value) })
+              }
+              className="mt-1 w-full border border-gray-300 rounded px-3 py-2"
+            >
+              <option value="">Selecciona un autor</option>
+              {authors.map((author) => (
+                <option key={author._id} value={author.authorId}>
+                  {author.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="flex gap-2 mt-4">
-          <button
-            onClick={() => void onSubmit()}
-            className="bg-green-600 px-4 py-2 rounded"
-          >
-            {mode === "delete" ? "Confirm Delete" : "Save"}
-          </button>
-          <button onClick={onClose} className="bg-gray-600 px-4 py-2 rounded">
-            Cancel
-          </button>
-        </div>
+          {/* Category */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Category
+            </label>
+            <input
+              type="text"
+              value={book.category}
+              onChange={(e) =>
+                setBook({
+                  ...book,
+                  category: e.target.value,
+                })
+              }
+              className="mt-1 w-full border border-gray-300 rounded px-3 py-2"
+              placeholder="Magic, Drama, etc..."
+            />
+          </div>
+
+          {/* PublishedYear */}
+          <div className="mb-4 flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700">
+              Published Year
+            </label>
+            <input
+              type="number"
+              value={book.publishedYear}
+              onChange={(e) =>
+                setBook({ ...book, publishedYear: Number(e.target.value) })
+              }
+            />
+          </div>
+
+          {/* availableCopies */}
+          <div className="mb-4 flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700">
+              Available Copies
+            </label>
+            <input
+              type="number"
+              value={book.availableCopies}
+              onChange={(e) =>
+                setBook({ ...book, availableCopies: Number(e.target.value) })
+              }
+            />
+          </div>
+
+          {/* image */}
+          <div className="mb-4 flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700">
+              Image URL
+            </label>
+            <input
+              type="text"
+              value={book.img}
+              onChange={(e) => {
+                const value = e.target.value.trim();
+
+                //validamos que sea una URL o ruta valida
+                if (
+                  value === "" ||
+                  value.startsWith("http://") ||
+                  value.startsWith("https://") ||
+                  value.startsWith("/")
+                ) {
+                  setBook({ ...book, img: e.target.value });
+                } else {
+                  alert(
+                    "⚠ La URL de la imagen debe empezar con 'http', 'https' o '/'"
+                  );
+                }
+              }}
+              className="mt-1 w-full border border-gray-300 rounded px-3 py-2"
+              placeholder="Ej: https://example.com/book.jpg o /images/book.jpg"
+            />
+          </div>
+
+          {/* createdAt */}
+          <div className="mb-4 flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700">
+              createdAt
+            </label>
+            <input
+              type="text"
+              value={book.createdAt}
+              onChange={(e) => setBook({ ...book, createdAt: e.target.value })}
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="mt-6 flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+
+            {mode === "delete" ? (
+              <button
+                type="submit"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded"
+              >
+                Confirm Delete
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className={`px-4 py-2 rounded text-white ${
+                  mode === "create"
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
+              >
+                {mode === "create" ? "Crear Libro" : "Actualizar Libro"}
+              </button>
+            )}
+          </div>
+        </form>
       </div>
     </div>
   );
 };
-
-export default BookModal;

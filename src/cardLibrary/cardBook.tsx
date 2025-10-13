@@ -32,6 +32,10 @@ export const CardBook: React.FC<CardBookProps> = ({
   onButtonClick,
   onDelete,
 }) => {
+  const validImg =
+    img && (img.startsWith("http") || img.startsWith("/"))
+      ? img
+      : "/default-book.jpg";
   return (
     <div className="bg-gray-100 rounded-lg shadow-md p-4 mb-4 w-full max-w-md mx-auto">
       {/* Título */}
@@ -53,13 +57,15 @@ export const CardBook: React.FC<CardBookProps> = ({
       )}
 
       {/* Autor */}
-      {authorName && <div className="text-sm text-gray-500 mb-2">By: {authorName}</div>}
+      {authorName && (
+        <div className="text-sm text-gray-500 mb-2">By: {authorName}</div>
+      )}
 
       {/* Imagen */}
       <div className="mb-3">
         {img ? (
           // Si usas imágenes externas recuerda configurar domains en next.config.js
-          <Image alt={title ?? "book"} width={200} height={200} src={img} />
+          <Image alt={title ?? "book"} width={200} height={200} src={validImg} />
         ) : (
           <div className="w-[200px] h-[200px] bg-gray-300 flex items-center justify-center">
             No image

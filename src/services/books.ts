@@ -10,8 +10,8 @@ export const getBooks = async () => {
   };
 };
 
-export const createBook = async (
-  idBook: number,
+export const createBook = async ( book: {
+    idBook: number,
   title: string,
   authorId: number,
   category: string,
@@ -19,17 +19,8 @@ export const createBook = async (
   availableCopies: number,
   img: string,
   createdAt: string
-) => {
-  const response = await axios.post("http://localhost:3000/api/books", {
-    idBook: idBook,
-    title: title,
-    authorId: authorId,
-    category: category,
-    publishedYear: publishedYear,
-    availableCopies: availableCopies,
-    img: img,
-    createdAt: createdAt,
-  });
+}) => {
+  const response = await axios.post("http://localhost:3000/api/books", book);
 
   return response;
 };

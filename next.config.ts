@@ -10,9 +10,12 @@ images:{
     'images.unsplash.com',
     'blogger.googleusercontent.com',
     'pendulo.com',
-    'm.media-amazon.com'
+    'm.media-amazon.com',
+    'images.remotePatterns'
   ]
   },
+
+
 
   /* config options here */
   reactStrictMode: true,

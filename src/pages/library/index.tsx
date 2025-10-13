@@ -5,6 +5,9 @@ import React, { useEffect, useState } from "react";
 import { deleteAuthor } from "../../services/authors";
 import { getBooks } from "@/services/books";
 import { CardBook } from "@/cardLibrary/cardBook";
+import { createBook, putBook, deleteBook } from "@/services/books";
+import { BookModal } from "@/components/button/BookModal";
+import Authors from "@/database/models/authors";
 
 interface authorProps {
   _id?: string;
@@ -63,6 +66,76 @@ export const Library = () => {
     birthYear: 0,
     isActive: true,
   });
+
+  const [selectedBook, setSelectedBook] = useState<bookProps>({
+    idBook: 0,
+    title: "",
+    authorId: 0,
+    category: "",
+    publishedYear: new Date().getFullYear(),
+    availableCopies: 0,
+    img: "",
+    createdAt: new Date().toISOString(),
+  });
+
+  const openCreateBookModal = () => {
+    setModalMode("create");
+    setSelectedBook({
+      idBook: 0,
+      title: "",
+      authorId: 0,
+      category: "",
+      publishedYear: new Date().getFullYear(),
+      availableCopies: 0,
+      img: "",
+      createdAt: new Date().toISOString(),
+    });
+    setIsBookModalOpen(true);
+  };
+
+  const openEditBookModal = (book: bookProps) => {
+    setModalMode("edit");
+    setSelectedBook(book);
+    setIsBookModalOpen(true);
+  };
+
+  const handleDeleteBook = (book: bookProps) => {
+    setModalMode("delete");
+    setSelectedBook(book);
+    setIsBookModalOpen(true);
+  };
+
+  const handleSubmitBookModal = async () => {
+    if (!selectedBook.title || !selectedBook.category) {
+      alert("Please complete all fields");
+      return;
+    }
+
+    if (
+      modalMode === "create" &&
+      dataBooks.datos.some((book) => book.idBook === selectedBook.idBook)
+    ) {
+      alert("A book with this ID already exists.");
+      return;
+    }
+
+    try {
+      if (modalMode === "create") {
+        await createBook(selectedBook);
+      } else if (modalMode === "edit" && selectedBook._id) {
+        await putBook(selectedBook);
+      } else if (modalMode === "delete" && selectedBook._id) {
+        await deleteBook(selectedBook._id);
+      }
+
+      const response = await getBooks();
+      setDataBooks(response);
+      setIsBookModalOpen(false);
+    } catch (error) {
+      console.log("Error while saving book:", error);
+      alert("There was an error while saving the book.");
+    }
+  };
 
   const openCreateModal = async () => {
     setModalMode("create");
@@ -146,13 +219,12 @@ export const Library = () => {
     }
   };
 
-
   useEffect(() => {
     const fechData = async () => {
       const author = await getAuthors();
       const books = await getBooks();
-       setDataAuthors(author);
-       setDataBooks(books)
+      setDataAuthors(author);
+      setDataBooks(books);
     };
     fechData();
   }, []);
@@ -165,25 +237,36 @@ export const Library = () => {
           <div className="flex gap-1 ">
             <button
               className="bg-gray-500 gap-3 miButton"
-              onClick={openCreateModal}
+              onClick={openCreateBookModal} // 👈 antes usaba openCreateModal
             >
               Add Book
             </button>
           </div>
           {dataBooks.datos && (
             <div className="bg-black rounded-3xl authorContainer ">
-              {dataBooks.datos.map((book: bookProps) => (
-                <CardBook
-                  title={book.title}
-                  authorId={Number(book.authorId)}
-                  key={book.idBook}
-                  category={book.category}
-                  publishedYear={book.publishedYear}
-                  img={book.img}
-                  createdAt={book.createdAt}
-                  buttonText="Edit"
-                />
-              ))}
+              {dataBooks.datos.map((book: bookProps) => {
+                // Buscar el autor correspondiente
+                const author = dataAuthors.datos.find(
+                  (a) => a.authorId === book.authorId
+                );
+
+                return (
+                  <CardBook
+                    key={book.idBook}
+                    title={book.title}
+                    authorId={book.authorId}
+                    authorName={author ? author.name : "Unknown Author"}
+                    category={book.category}
+                    publishedYear={book.publishedYear}
+                    availableCopies={book.availableCopies}
+                    img={book.img}
+                    createdAt={book.createdAt}
+                    buttonText="Edit"
+                    onButtonClick={() => openEditBookModal(book)}
+                    onDelete={() => handleDeleteBook(book)}
+                  />
+                );
+              })}
             </div>
           )}
         </div>
@@ -252,6 +335,17 @@ export const Library = () => {
         mode={modalMode}
         author={selectedAuthor}
         setAuthor={setSelectedAuthor}
+      />
+
+      <BookModal
+        isOpen={isBookModalOpen}
+        onClose={() => setIsBookModalOpen(false)}
+        onSubmit={handleSubmitBookModal}
+        mode={modalMode}
+        book={selectedBook}
+        setBook={setSelectedBook}
+        //action={modalMode}
+        authors={dataAuthors.datos}
       />
     </>
   );

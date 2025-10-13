@@ -4,7 +4,7 @@ interface AuthorModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: () => void;
-  title: string;
+  title?: string;
   mode: "create" | "edit" | "delete";
   author: {
     authorId: number;
