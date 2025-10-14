@@ -158,7 +158,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               Image
             </label>
             <input
-              type="number"
+              type="text"
               value={product.imageUrl}
               onChange={(e) =>
                 setProduct({ ...product, imageUrl: e.target.value })
