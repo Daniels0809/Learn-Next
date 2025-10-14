@@ -9,39 +9,39 @@ interface Props {
 
 export const Provider = ({ children }: Props) => {
   const [userLogged, setUserLogged] = useState<UserLog>({
-    name: "",
-    role: "",
+    username: "",
+    role: "user",
     isActive: false,
-    date: "",
+    createdAt: "",
   });
   const [isActive, setIsActive] = useState(false);
-  const [mounted, setMounted] = useState(false); // ✅ clave para evitar hydration error
+  const [mounted, setMounted] = useState(false);
 
+  // ✅ Restaurar usuario desde localStorage
   useEffect(() => {
-    setMounted(true); // ya estamos en el cliente
-
+    setMounted(true);
     try {
       const storedUser = localStorage.getItem("userLogged");
       if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser.name && parsedUser.role) {
+        const parsedUser: UserLog = JSON.parse(storedUser);
+        if (parsedUser.username && parsedUser.role) {
           setUserLogged(parsedUser);
-          setIsActive(parsedUser.isActive || true);
+          setIsActive(!!parsedUser.isActive);
         }
       }
     } catch (error) {
-      console.error("Error reading localStorage:", error);
+      console.error("Error leyendo localStorage:", error);
     }
   }, []);
 
-  // 🔹 Guardar usuario cuando cambia
+  // 💾 Guardar usuario cuando cambia
   useEffect(() => {
-    if (userLogged && userLogged.name) {
+    if (userLogged && userLogged.username) {
       localStorage.setItem("userLogged", JSON.stringify(userLogged));
     }
   }, [userLogged]);
 
-  // 🚫 Si aún no estamos montados en el cliente, no renderices nada
+  // 🚫 Evita render hasta montar en cliente
   if (!mounted) return null;
 
   return (

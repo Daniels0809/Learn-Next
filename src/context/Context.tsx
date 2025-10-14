@@ -1,16 +1,32 @@
+"use client";
+
 import { createContext } from "react";
+
+// 🧩 Interfaz del usuario global
 export interface UserLog {
-  name: string;
-  role: string;
+  username: string;
+  role: "admin" | "user";
   isActive: boolean;
-  date: string;
+  createdAt: string;
 }
 
-export type contextProps = {
+// 🧩 Interfaz del contexto completo
+interface MyContextType {
   userLogged: UserLog;
-  setUserLogged: (userLogged: UserLog) => void;
-  isActive: boolean,
-  setIsActive: (isActive:boolean)=>void
-};
+  setUserLogged: React.Dispatch<React.SetStateAction<UserLog>>;
+  isActive: boolean;
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export const MyContext = createContext<contextProps>({} as contextProps);
+// 🔹 Contexto global exportado
+export const MyContext = createContext<MyContextType>({
+  userLogged: {
+    username: "",
+    role: "user",
+    isActive: false,
+    createdAt: "",
+  },
+  setUserLogged: () => {},
+  isActive: false,
+  setIsActive: () => {},
+});

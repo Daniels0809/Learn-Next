@@ -1,45 +1,44 @@
-import { CardLibrary } from "@/cardLibrary/cardLibrary";
-import { AuthorModal } from "@/components/button/AuthorModal";
-import { createAuthor, getAuthors, putAuthor } from "@/services/authors";
+import { CardProduct } from "@/cardLibrary/cardProduct";
+import { createProduct, getProducts, putProduct } from "@/services/products";
 import React, { useContext, useEffect, useState } from "react";
-import { deleteAuthor } from "../../services/authors";
-import { getBooks } from "@/services/books";
-import { CardBook } from "@/cardLibrary/cardBook";
-import { createBook, putBook, deleteBook } from "@/services/books";
-import { BookModal } from "@/components/button/BookModal";
-import Authors from "@/database/models/authors";
+import { deleteProduct } from "../../services/products";
+import { CardUser } from "@/cardLibrary/cardUser";
+import { createUser, putUser, deleteUser, getUser } from "@/services/users";
+import { UserModal } from "@/components/button/UserModal";
 import { useRouter } from "next/router";
 import { MyContext } from "@/context/Context";
+import { ProductModal } from "@/components/button/ProductModal";
 
-interface authorProps {
+interface productProps {
   _id?: string;
-  authorId: number;
+  sku: string; 
   name: string;
-  nationality: string;
-  birthYear: number;
-  isActive: boolean;
-}
-
-interface bookProps {
-  _id?: string;
-  idBook: number;
-  title: string;
-  authorId: number;
+  brand: string; 
+  quantity: number;
+  price: number;
+  isActive: boolean; 
   category: string;
-  publishedYear: number;
-  availableCopies: number;
-  img: string;
+  imageUrl: string; 
   createdAt: string;
 }
 
-interface dataAuthors {
+interface dataProducts {
   ok: boolean;
-  datos: authorProps[];
+  datos: productProps[];
 }
 
-interface dataBooks {
+
+interface userProps {
+  _id?: string;
+  username: string;
+  password: string;
+  role: string;
+  createdAt: string;
+}
+
+interface dataUsers {
   ok: boolean;
-  datos: bookProps[];
+  datos: userProps[];
 }
 
 export const Library = () => {
@@ -47,198 +46,196 @@ export const Library = () => {
   const router = useRouter();
 
 useEffect(() => {
-  if (!userLogged?.isActive) {
-    router.push("/");
-  } else if (userLogged.role !== "admin") {
-    router.push("/dashboard");
-  }
-}, [userLogged]);
+  const checkAccess = () => {
+    const storedUser = localStorage.getItem("userLogged");
+
+    if (!storedUser) {
+      router.push("/");
+      return;
+    }
+
+    const user = JSON.parse(storedUser);
+
+    if (!user.isActive) {
+      router.push("/");
+      return;
+    }
+
+    if (user.role !== "admin") {
+      router.push("/dashboard");
+      return;
+    }
+  };
+
+  checkAccess();
+}, []);
 
 
-  const [dataAuthors, setDataAuthors] = useState<dataAuthors>({
+
+  const [dataProducts, setDataProducts] = useState<dataProducts>({
     ok: false,
     datos: [],
   });
 
-  const [dataBooks, setDataBooks] = useState<dataBooks>({
+  const [dataUsers, setDataUsers] = useState<dataUsers>({
     ok: false,
     datos: [],
   });
 
-  const [isAuthorModalOpen, setIsAuthorModalOpen] = useState(false);
-  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"create" | "edit" | "delete">(
     "create"
   );
 
-  const [selectedAuthor, setSelectedAuthor] = useState<authorProps>({
-    authorId: 0,
+  const [selectedProduct, setSelectedProduct] = useState<productProps>({
+
+    sku: "",
     name: "",
-    nationality: "",
-    birthYear: 0,
-    isActive: true,
+    brand: "",
+    quantity: 0,
+  price: 0,
+  isActive: true,
+  category: "",
+  imageUrl: "",
+  createdAt: ""
+
   });
 
-  const [selectedBook, setSelectedBook] = useState<bookProps>({
-    idBook: 0,
-    title: "",
-    authorId: 0,
-    category: "",
-    publishedYear: new Date().getFullYear(),
-    availableCopies: 0,
-    img: "",
+  const [selectedUser, setSelectedUser] = useState<userProps>({
+    username: "",
+    password: "",
+    role: "",
     createdAt: new Date().toISOString(),
   });
 
-  const openCreateBookModal = () => {
-    setModalMode("create");
-    setSelectedBook({
-      idBook: 0,
-      title: "",
-      authorId: 0,
-      category: "",
-      publishedYear: new Date().getFullYear(),
-      availableCopies: 0,
-      img: "",
-      createdAt: new Date().toISOString(),
-    });
-    setIsBookModalOpen(true);
-  };
+const openCreateUserModal = () => {
+  setModalMode("create");
+  setSelectedUser({
+    username: "",
+    password: "",
+    role: "",
+    createdAt: new Date().toISOString(),
+  });
+  setIsUserModalOpen(true);
+};
 
-  const openEditBookModal = (book: bookProps) => {
+
+  const openEditUserModal = (user: userProps) => {
     setModalMode("edit");
-    setSelectedBook(book);
-    setIsBookModalOpen(true);
+    setSelectedUser(user);
+    setIsUserModalOpen(true);
   };
 
-  const handleDeleteBook = (book: bookProps) => {
+  const handleDeleteUser = (user: userProps) => {
     setModalMode("delete");
-    setSelectedBook(book);
-    setIsBookModalOpen(true);
+    setSelectedUser(user);
+    setIsUserModalOpen(true);
   };
 
-  const handleSubmitBookModal = async () => {
-    if (!selectedBook.title || !selectedBook.category) {
-      alert("Please complete all fields");
-      return;
-    }
-
-    if (
-      modalMode === "create" &&
-      dataBooks.datos.some((book) => book.idBook === selectedBook.idBook)
-    ) {
-      alert("A book with this ID already exists.");
-      return;
-    }
-
-    try {
-      if (modalMode === "create") {
-        await createBook(selectedBook);
-      } else if (modalMode === "edit" && selectedBook._id) {
-        await putBook(selectedBook);
-      } else if (modalMode === "delete" && selectedBook._id) {
-        await deleteBook(selectedBook._id);
-      }
-
-      const response = await getBooks();
-      setDataBooks(response);
-      setIsBookModalOpen(false);
-    } catch (error) {
-      console.log("Error while saving book:", error);
-      alert("There was an error while saving the book.");
-    }
-  };
 
   const openCreateModal = async () => {
     setModalMode("create");
-    setSelectedAuthor({
-      authorId: 0,
-      name: "",
-      nationality: "",
-      birthYear: 0,
-      isActive: true,
+    setSelectedProduct({
+    sku: "",
+    name: "",
+    brand: "",
+    quantity: 0,
+    price: 0,
+    isActive: false,
+    category: "",
+    imageUrl: "",
+    createdAt: new Date().toISOString(),
     });
     setIsModalOpen(true);
-    const response = await getAuthors();
-    setDataAuthors(response);
+    const response = await getProducts();
+    setDataProducts(response);
   };
 
-  const openEditModal = async (author: authorProps) => {
+  const openEditModal = async (product: productProps) => {
     setModalMode("edit");
-    setSelectedAuthor(author);
+    setSelectedProduct(product);
     setIsModalOpen(true);
-    const response = await getAuthors();
-    setDataAuthors(response);
+    const response = await getProducts();
+    setDataProducts(response);
   };
 
-  const handleDelete = async (id: string, author: authorProps) => {
+  const handleDelete = async (id: string, product: productProps) => {
     try {
       setModalMode("delete");
-      setSelectedAuthor(author);
+      setSelectedProduct(product);
       setIsModalOpen(true);
-      const response = await getAuthors();
-      setDataAuthors(response);
+      const response = await getProducts();
+      setDataProducts(response);
     } catch (error) {
-      alert("Error deleting author");
+      alert("Error deleting product");
     }
   };
 
   const handleSubmitModal = async () => {
-    if (!selectedAuthor.name || !selectedAuthor.nationality) {
+    if (!selectedProduct.name || !selectedProduct.category) {
       alert("Please complete all fields");
       return;
     }
 
     if (
       modalMode === "create" &&
-      dataAuthors.datos.some(
-        (author) => author.authorId === selectedAuthor.authorId
+      dataProducts.datos.some(
+        (product) => product.sku === selectedProduct.sku
       )
     ) {
-      alert("An author whit this ID already exists.");
+      alert("An product whit this ID already exists.");
       return;
     }
 
     try {
       if (modalMode === "create") {
-        await createAuthor(
-          selectedAuthor.authorId,
-          selectedAuthor.name,
-          selectedAuthor.nationality,
-          selectedAuthor.birthYear,
-          selectedAuthor.isActive
+        await createProduct(
+          selectedProduct.sku,
+          selectedProduct.name,
+          selectedProduct.brand,
+          selectedProduct.quantity,
+          selectedProduct.price,
+          selectedProduct.isActive,
+          selectedProduct.category,
+          selectedProduct.imageUrl,
+          selectedProduct.createdAt
         );
       }
-      if (modalMode === "edit" && selectedAuthor._id) {
-        await putAuthor({
-          _id: selectedAuthor._id,
-          name: selectedAuthor.name,
-          nationality: selectedAuthor.nationality,
-          birthYear: selectedAuthor.birthYear,
-          isActive: selectedAuthor.isActive,
+      if (modalMode === "edit" && selectedProduct._id) {
+        await putProduct({
+          _id: selectedProduct._id,
+          sku: selectedProduct.sku,
+          name: selectedProduct.name,
+          brand: selectedProduct.brand,
+          quantity: selectedProduct.quantity,
+          price: selectedProduct.price,
+          isActive: selectedProduct.isActive,
+          category: selectedProduct.category,
+          imageUrl: selectedProduct.imageUrl,
+          createdAt: selectedProduct.createdAt
         });
       }
       if (modalMode === "delete") {
-        await deleteAuthor(selectedAuthor._id as string);
+        await deleteProduct(selectedProduct._id as string);
       }
 
-      const response = await getAuthors();
-      setDataAuthors(response);
+      const response = await getProducts();
+      setDataProducts(response);
       setIsModalOpen(false);
     } catch (error) {
-      console.log("Error while savinf author:", error);
-      alert("There was an error while saving the author.");
+      console.log("Error while savinf product:", error);
+      alert("There was an error while saving the product.");
     }
   };
 
   useEffect(() => {
     const fechData = async () => {
-      const author = await getAuthors();
-      const books = await getBooks();
-      setDataAuthors(author);
-      setDataBooks(books);
+      const product = await getProducts();
+      const users = await getUser();
+      setDataProducts(product);
+      setDataUsers(users);
     };
     fechData();
   }, []);
@@ -249,9 +246,38 @@ const route = useRouter();
 
 const handleLogout = () => {
   localStorage.removeItem("userLogged");
-  setUserLogged({ name: "", role: "", isActive: false, date: "" });
+  setUserLogged({ username: "", role: "user", isActive: false, createdAt: "" });
   setIsActive(false);
   route.push("/")
+};
+
+
+const handleSubmitUserModal = async () => {
+    // 1. Validar campos del USUARIO
+    if (!selectedUser.username || !selectedUser.password) {
+        alert("Please complete all fields for the user.");
+        return;
+    }
+
+    try {
+        // 2. Lógica CRUD para USUARIOS
+        if (modalMode === "create") {
+            await createUser(selectedUser);
+        } else if (modalMode === "edit" && selectedUser._id) {
+            // Asegúrate de enviar solo los campos actualizables si la API lo requiere
+            await putUser(selectedUser); 
+        } else if (modalMode === "delete" && selectedUser._id) {
+            await deleteUser(selectedUser._id);
+        }
+
+        // 3. Recargar la lista de usuarios y cerrar el modal
+        const response = await getUser();
+        setDataUsers(response);
+        setIsUserModalOpen(false); // Cierra el modal de usuario
+    } catch (error) {
+        console.log("Error while saving user:", error);
+        alert("There was an error while saving the user.");
+    }
 };
 
   return (
@@ -262,16 +288,16 @@ const handleLogout = () => {
     <h1 className="text-2xl font-bold text-gray-800">📚 Admin Panel</h1>
     <div className="flex gap-3">
       <button
-        onClick={openCreateBookModal}
+        onClick={openCreateUserModal}
         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
       >
-        ➕ Add Book
+        ➕ Add User
       </button>
       <button
         onClick={openCreateModal}
         className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
       >
-        ✍️ Add Author
+        📦 Add Product
       </button>
       <button
         onClick={handleLogout}
@@ -284,93 +310,94 @@ const handleLogout = () => {
 
   {/* Contenido principal */}
   <main className="px-8 py-10">
-    {/* Books Section */}
+    {/* Users Section */}
     <section className="mb-12">
       <h2 className="text-xl font-semibold mb-4 border-l-4 border-blue-600 pl-3">
-        Books
+        Users
       </h2>
 
-      {dataBooks.datos && dataBooks.datos.length > 0 ? (
+      {dataUsers.datos && dataUsers.datos.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {dataBooks.datos.map((book: bookProps) => {
-            const author = dataAuthors.datos.find(
-              (a) => a.authorId === book.authorId
-            );
+          {dataUsers.datos.map((user: userProps) => {
             return (
-              <CardBook
-                key={book.idBook}
-                title={book.title}
-                authorId={book.authorId}
-                authorName={author ? author.name : "Unknown Author"}
-                category={book.category}
-                publishedYear={book.publishedYear}
-                availableCopies={book.availableCopies}
-                img={book.img}
-                createdAt={book.createdAt}
+              <CardUser
+                key={user._id}
+                username={user.username}
+                password={user.password}
+                role={user ? user.role : "Unknown role"}
+                createdAt={user.createdAt}
                 buttonText="Edit"
-                onButtonClick={() => openEditBookModal(book)}
-                onDelete={() => handleDeleteBook(book)}
+                onButtonClick={() => openEditUserModal(user)}
+                onDelete={() => handleDeleteUser(user)}
               />
             );
           })}
         </div>
       ) : (
-        <p className="text-gray-500 italic">No books found.</p>
+        <p className="text-gray-500 italic">No users found.</p>
       )}
     </section>
 
-    {/* Authors Section */}
+    {/* Users Section */}
     <section>
       <h2 className="text-xl font-semibold mb-4 border-l-4 border-green-600 pl-3">
-        Authors
+        Products
       </h2>
 
-      {dataAuthors.datos && dataAuthors.datos.length > 0 ? (
+      {dataProducts.datos && dataProducts.datos.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {dataAuthors.datos.map((author: authorProps) => (
-            <CardLibrary
-              key={author.authorId}
-              authorId={Number(author.authorId)}
-              name={author.name}
-              nationality={author.nationality}
-              birthYear={author.birthYear}
+          {dataProducts.datos.map((product: productProps) => (
+            <CardProduct
+              key={product.sku}
+              sku={product.sku}
+              name={product.name}
+              brand={product.brand}
+              quantity={product.quantity}
+              price={product.price}
+              isActive={product.isActive}
+              category={product.category}
+              img={product.imageUrl}
+              createdAt={product.createdAt}
               buttonText="Edit"
-              onButtonClick={() => openEditModal(author)}
-              onDelete={() => handleDelete(String(author._id), author)}
+              onButtonClick={() => openEditModal(product)}
+              onDelete={() => handleDelete(String(product._id), product)}
             />
           ))}
         </div>
       ) : (
-        <p className="text-gray-500 italic">No authors found.</p>
+        <p className="text-gray-500 italic">No products found.</p>
       )}
     </section>
   </main>
 
+
   {/* Modals */}
-  <AuthorModal
-    isOpen={isModalOpen}
-    onClose={() => setIsModalOpen(false)}
-    onSubmit={handleSubmitModal}
+  <UserModal
+    isOpen={isUserModalOpen}
+    onClose={() => setIsUserModalOpen(false)}
+    // ¡CORRECCIÓN CLAVE! ASIGNAR LA FUNCIÓN CORRECTA PARA USUARIOS
+    onSubmit={handleSubmitUserModal} 
     title={
       modalMode === "create"
-        ? "Create Author"
+        ? "Create User" // Título corregido
         : modalMode === "edit"
-        ? "Edit Author"
-        : "Delete Author"
+        ? "Edit User" // Título corregido
+        : "Delete User" // Título corregido
     }
     mode={modalMode}
-    author={selectedAuthor}
-    setAuthor={setSelectedAuthor}
+    user={selectedUser}
+    setUser={setSelectedUser}
   />
 
-  <BookModal
-    isOpen={isBookModalOpen}
-    onClose={() => setIsBookModalOpen(false)}
-    onSubmit={handleSubmitBookModal}
+  <ProductModal
+    isOpen={isModalOpen}
+    onClose={() => setIsModalOpen(false)}
+    // NOTA: Esta línea DEBERÍA usar una función separada (ej: handleSubmitProductModal)
+    // Pero si handleSubmitModal ya tiene la lógica de Productos, se mantiene por ahora.
+    onSubmit={handleSubmitModal} 
     mode={modalMode}
-    book={selectedBook}
-    setBook={setSelectedBook}
-    authors={dataAuthors.datos}
+    product={selectedProduct}
+    setProduct={setSelectedProduct}
   />
 </div>
     </>

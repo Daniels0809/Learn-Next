@@ -2,9 +2,9 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/api/auth";
 
-export const loginUser = async (email: string, password: string) => {
+export const loginUser = async (username: string, password: string) => {
   try {
-    const response = await axios.get(`${API_URL}?email=${email}&password=${password}`);
+    const response = await axios.get(`${API_URL}?username=${username}&password=${password}`);
     const data = response.data;
 
     if (!data.ok || !data.user) {

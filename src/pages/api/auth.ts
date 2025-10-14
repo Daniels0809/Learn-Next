@@ -6,12 +6,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 interface User {
   _id?: string;
-  userId?: number;
   name: string;
-  email: string;
   password: string;
   role: string;
-  isActive: boolean;
   createdAt: string;
 }
 
@@ -36,11 +33,11 @@ export default async function handler(
     // 🔹 GET USERS (All or by email/password)
     // =============================
     if (req.method === "GET") {
-      const { email, password } = req.query;
+      const { username, password } = req.query;
 
       // Login (find by email + password)
-      if (email && password) {
-        const user = await Users.findOne({ email, password });
+      if (username && password) {
+        const user = await Users.findOne({ username, password });
 
         if (!user) {
           return res
@@ -60,16 +57,12 @@ export default async function handler(
     // 🔹 CREATE USER
     // =============================
     if (req.method === "POST") {
-      const { userId, name, email, password, role, isActive, createdAt } =
-        req.body;
+      const { username, password, role, createdAt } = req.body;
 
       const newUser = new Users({
-        userId,
-        name,
-        email,
+        username,
         password,
         role,
-        isActive,
         createdAt,
       });
 
@@ -143,6 +136,8 @@ export default async function handler(
     });
   } catch (err) {
     console.error("❌ API Error:", err);
-    return res.status(500).json({ ok: false, message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal server error" });
   }
 }
