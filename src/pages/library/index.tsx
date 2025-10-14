@@ -1,13 +1,15 @@
 import { CardLibrary } from "@/cardLibrary/cardLibrary";
 import { AuthorModal } from "@/components/button/AuthorModal";
 import { createAuthor, getAuthors, putAuthor } from "@/services/authors";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { deleteAuthor } from "../../services/authors";
 import { getBooks } from "@/services/books";
 import { CardBook } from "@/cardLibrary/cardBook";
 import { createBook, putBook, deleteBook } from "@/services/books";
 import { BookModal } from "@/components/button/BookModal";
 import Authors from "@/database/models/authors";
+import { useRouter } from "next/router";
+import { MyContext } from "@/context/Context";
 
 interface authorProps {
   _id?: string;
@@ -41,6 +43,18 @@ interface dataBooks {
 }
 
 export const Library = () => {
+  const { userLogged } = useContext(MyContext);
+  const router = useRouter();
+
+useEffect(() => {
+  if (!userLogged?.isActive) {
+    router.push("/");
+  } else if (userLogged.role !== "admin") {
+    router.push("/dashboard");
+  }
+}, [userLogged]);
+
+
   const [dataAuthors, setDataAuthors] = useState<dataAuthors>({
     ok: false,
     datos: [],
@@ -229,124 +243,136 @@ export const Library = () => {
     fechData();
   }, []);
 
+
+const { setUserLogged, setIsActive } = useContext(MyContext);
+const route = useRouter();
+
+const handleLogout = () => {
+  localStorage.removeItem("userLogged");
+  setUserLogged({ name: "", role: "", isActive: false, date: "" });
+  setIsActive(false);
+  route.push("/")
+};
+
   return (
     <>
-      <div>
-        <div>
-          {""}
-          <div className="flex gap-1 ">
-            <button
-              className="bg-gray-500 gap-3 miButton"
-              onClick={openCreateBookModal} // 👈 antes usaba openCreateModal
-            >
-              Add Book
-            </button>
-          </div>
-          {dataBooks.datos && (
-            <div className="bg-black rounded-3xl authorContainer ">
-              {dataBooks.datos.map((book: bookProps) => {
-                // Buscar el autor correspondiente
-                const author = dataAuthors.datos.find(
-                  (a) => a.authorId === book.authorId
-                );
+      <div className="min-h-screen bg-gradient-to-br from-gray-300 to-gray-200 text-gray-800">
+  {/* Header */}
+  <header className="flex justify-between items-center bg-white shadow-md px-8 py-4 sticky top-0 z-10">
+    <h1 className="text-2xl font-bold text-gray-800">📚 Admin Panel</h1>
+    <div className="flex gap-3">
+      <button
+        onClick={openCreateBookModal}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+      >
+        ➕ Add Book
+      </button>
+      <button
+        onClick={openCreateModal}
+        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
+      >
+        ✍️ Add Author
+      </button>
+      <button
+        onClick={handleLogout}
+        className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+      >
+        ⎋ Logout
+      </button>
+    </div>
+  </header>
 
-                return (
-                  <CardBook
-                    key={book.idBook}
-                    title={book.title}
-                    authorId={book.authorId}
-                    authorName={author ? author.name : "Unknown Author"}
-                    category={book.category}
-                    publishedYear={book.publishedYear}
-                    availableCopies={book.availableCopies}
-                    img={book.img}
-                    createdAt={book.createdAt}
-                    buttonText="Edit"
-                    onButtonClick={() => openEditBookModal(book)}
-                    onDelete={() => handleDeleteBook(book)}
-                  />
-                );
-              })}
-            </div>
-          )}
+  {/* Contenido principal */}
+  <main className="px-8 py-10">
+    {/* Books Section */}
+    <section className="mb-12">
+      <h2 className="text-xl font-semibold mb-4 border-l-4 border-blue-600 pl-3">
+        Books
+      </h2>
+
+      {dataBooks.datos && dataBooks.datos.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {dataBooks.datos.map((book: bookProps) => {
+            const author = dataAuthors.datos.find(
+              (a) => a.authorId === book.authorId
+            );
+            return (
+              <CardBook
+                key={book.idBook}
+                title={book.title}
+                authorId={book.authorId}
+                authorName={author ? author.name : "Unknown Author"}
+                category={book.category}
+                publishedYear={book.publishedYear}
+                availableCopies={book.availableCopies}
+                img={book.img}
+                createdAt={book.createdAt}
+                buttonText="Edit"
+                onButtonClick={() => openEditBookModal(book)}
+                onDelete={() => handleDeleteBook(book)}
+              />
+            );
+          })}
         </div>
-      </div>
+      ) : (
+        <p className="text-gray-500 italic">No books found.</p>
+      )}
+    </section>
 
-      <AuthorModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-        onSubmit={handleSubmitModal}
-        title={
-          modalMode === "create"
-            ? "Create Author"
-            : modalMode == "edit"
-            ? "Edit Author"
-            : "Delete Author"
-        }
-        mode={modalMode}
-        author={selectedAuthor}
-        setAuthor={setSelectedAuthor}
-      />
-      <div>
-        <div>
-          {""}
-          <div className="flex gap-1 ">
-            <button
-              className="bg-gray-500 gap-3 miButton"
-              onClick={openCreateModal}
-            >
-              Add author
-            </button>
-          </div>
-          {dataAuthors.datos && (
-            <div className="bg-black rounded-3xl authorContainer ">
-              {dataAuthors.datos.map((author: authorProps) => (
-                <CardLibrary
-                  authorId={Number(author.authorId)}
-                  key={author.authorId}
-                  name={author.name}
-                  nationality={author.nationality}
-                  birthYear={author.birthYear}
-                  buttonText="Edit"
-                  onButtonClick={() => openEditModal(author)}
-                  onDelete={() => handleDelete(String(author._id), author)}
-                />
-              ))}
-            </div>
-          )}
+    {/* Authors Section */}
+    <section>
+      <h2 className="text-xl font-semibold mb-4 border-l-4 border-green-600 pl-3">
+        Authors
+      </h2>
+
+      {dataAuthors.datos && dataAuthors.datos.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {dataAuthors.datos.map((author: authorProps) => (
+            <CardLibrary
+              key={author.authorId}
+              authorId={Number(author.authorId)}
+              name={author.name}
+              nationality={author.nationality}
+              birthYear={author.birthYear}
+              buttonText="Edit"
+              onButtonClick={() => openEditModal(author)}
+              onDelete={() => handleDelete(String(author._id), author)}
+            />
+          ))}
         </div>
-      </div>
+      ) : (
+        <p className="text-gray-500 italic">No authors found.</p>
+      )}
+    </section>
+  </main>
 
-      <AuthorModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-        onSubmit={handleSubmitModal}
-        title={
-          modalMode === "create"
-            ? "Create Auhtor"
-            : modalMode == "edit"
-            ? "Edit Author"
-            : "Delete Author"
-        }
-        mode={modalMode}
-        author={selectedAuthor}
-        setAuthor={setSelectedAuthor}
-      />
+  {/* Modals */}
+  <AuthorModal
+    isOpen={isModalOpen}
+    onClose={() => setIsModalOpen(false)}
+    onSubmit={handleSubmitModal}
+    title={
+      modalMode === "create"
+        ? "Create Author"
+        : modalMode === "edit"
+        ? "Edit Author"
+        : "Delete Author"
+    }
+    mode={modalMode}
+    author={selectedAuthor}
+    setAuthor={setSelectedAuthor}
+  />
 
-      <BookModal
-        isOpen={isBookModalOpen}
-        onClose={() => setIsBookModalOpen(false)}
-        onSubmit={handleSubmitBookModal}
-        mode={modalMode}
-        book={selectedBook}
-        setBook={setSelectedBook}
-        //action={modalMode}
-        authors={dataAuthors.datos}
-      />
+  <BookModal
+    isOpen={isBookModalOpen}
+    onClose={() => setIsBookModalOpen(false)}
+    onSubmit={handleSubmitBookModal}
+    mode={modalMode}
+    book={selectedBook}
+    setBook={setSelectedBook}
+    authors={dataAuthors.datos}
+  />
+</div>
     </>
   );
 };

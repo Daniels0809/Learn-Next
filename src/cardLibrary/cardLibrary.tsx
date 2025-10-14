@@ -24,47 +24,51 @@ export const CardLibrary = ({
   onDelete,
 }: CardProps) => {
   return (
-    <div className="bg-gray-100 rounded-lg shadow-md p-4 mb-4 w-full max-w-md mx-auto">
-      {/* Título */}
-      {title && (
-        <div
-          className="text-lg font-semibold mb-2"
-          style={
-            background
-              ? {
-                  backgroundColor: background,
-                  padding: "0.25rem",
-                  borderRadius: "0.25rem",
-                }
-              : {}
-          }
-        >
-          {title}
-        </div>
-      )}
+    <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden max-w-sm mx-auto p-5 border border-gray-100">
+  {/* Header */}
+  <div className="flex justify-between items-center mb-3">
+    <h2 className="text-xl font-bold text-gray-800 truncate">
+      {title}
+    </h2>
+    {background && (
+      <span
+        className="text-xs font-semibold px-2 py-1 rounded-full"
+        style={{ backgroundColor: background, color: "#fff" }}
+      >
+        Featured
+      </span>
+    )}
+  </div>
 
-      <div className="text-gray-800 font-medium">Author: {name}</div>
+  {/* Autor */}
+  <div className="space-y-2 mb-4">
+    <p className="text-lg font-semibold text-gray-900">
+      👤 {name || "Unknown Author"}
+    </p>
+    <p className="text-sm text-gray-600">
+      🌍 Nationality: <span className="font-medium">{nationality || "N/A"}</span>
+    </p>
+    <p className="text-sm text-gray-600">
+      🎂 Birth Year: <span className="font-medium">{birthYear || "Unknown"}</span>
+    </p>
+  </div>
 
-      <div className="text-gray-600">
-        Nationality: {nationality} <br />
-        BirthYear: {birthYear}
-      </div>
+  {/* Acciones */}
+  <div className="flex gap-3 mt-4">
+    <button
+      onClick={onButtonClick}
+      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-xl transition-colors duration-200"
+    >
+      {buttonText || "View"}
+    </button>
+    <button
+      onClick={onDelete}
+      className="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-2 rounded-xl transition-colors duration-200"
+    >
+      Delete
+    </button>
+  </div>
+</div>
 
-      {/* Botón */}
-      <div className="mt-4 gap-2 flex">
-        <button
-          onClick={onButtonClick}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200"
-        >
-          {buttonText}
-        </button>
-        <button
-          onClick={onDelete}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200"
-        >
-          Delete
-        </button>
-      </div>
-    </div>
   );
 };

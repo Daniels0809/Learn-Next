@@ -4,13 +4,7 @@ import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { notification } from "@/helpers/utils";
 import { MyContext } from "@/context/Context";
-
-const userLogueado = {
-  name: "daniel",
-  role: "admin",
-  isActive: true,
-  date: "24/12/2025",
-};
+import { loginUser } from "@/services/auth";
 
 export default function Home() {
   const [user, setUser] = useState("");
@@ -22,66 +16,102 @@ export default function Home() {
   const router = useRouter();
 
   const handleClick = async () => {
-    if (user === "daniel" && pass === "12345") {
-      setUserLogged(userLogueado);
-      notification("login exitoso", "success");
-      setIsActive(isActive);
-      router.push("/dashboard");
+
+    try {
+      const loggedUser = await loginUser(user, pass);
+
+      if (!loggedUser.isActive) {
+       notification("Tu cuenta esta inactiva", "error")
+       return; 
+      }
+
+      setUserLogged(loggedUser);
+      setIsActive(true);
+      notification("Login succesfull", "success");
+
+      if(loggedUser.role === "admin"){
+        router.push("/library");
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error: any) {
+      notification(error.message, "error")
     }
-    if (user === "daniel" && pass === "123") {
-      setUserLogged(userLogueado);
-      notification("login exitoso", "success");
-      setIsActive(isActive);
-      router.push("/form");
-    }
-  };
+ };
+
+
 
   return (
-    <div className="flex items-center">
-      <div className="max-w-3/6">
-        <div>Login</div>
+<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 p-4">
+      <div className="bg-white shadow-2xl rounded-2xl w-full max-w-md p-8 border border-gray-200">
+        <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
+          Iniciar sesión
+        </h1>
+        <p className="text-center text-gray-500 mb-8">
+          Bienvenido al panel de administración
+        </p>
 
-        <label>User</label>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Email
+            </label>
+            <Input
+              placeholder="Ingrese su correo electrónico"
+              type="text"
+              onChange={(e) => setUser(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg"
+            />
+          </div>
 
-        <Input
-          label=""
-          placeholder="Enter your user"
-          type="text"
-          onChange={(e) => {
-            setUser(e.target.value);
-          }}
-        />
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Contraseña
+            </label>
+            <Input
+              placeholder="Ingrese su contraseña"
+              type="password"
+              onChange={(e) => setPass(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg"
+            />
+          </div>
 
-        <label>Password</label>
-        <Input
-          label=""
-          placeholder="Enter your password"
-          type="password"
-          onChange={(e) => {
-            setPass(e.target.value);
-          }}
-        />
+          <Button
+            onPress={handleClick}
+            className="w-full mt-6 bg-gray-800 hover:bg-gray-900 text-white font-semibold rounded-xl py-3 transition-all shadow-md hover:shadow-lg"
+          >
+            Iniciar sesión
+          </Button>
+        </div>
 
-        <Button onPress={handleClick} className="mt-7" color="primary">
-          Login
-        </Button>
+        <div className="mt-6 text-center text-sm text-gray-600">
+          <p>
+            <strong>Admin:</strong> daniel@example.com
+          </p>
+          <p>
+            <strong>Password:</strong> 123456
+          </p>
+        </div>
 
-        <Button
-          onPress={() => {
-            setIsActive(!isActive);
-          }}
-          className="mt-7"
-          color="primary"
-        >
-          Button
-        </Button>
-
-        {isActive ? <div>Esta activo</div> : <div>Esta desactivado</div>}
-
-        <Switch isSelected={isActive} onValueChange={setIsActive}>
-          Airplane mode
-        </Switch>
+        <div className="flex flex-col items-center mt-6">
+          <div
+            className={`text-sm font-semibold mb-2 ${
+              isActive ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {isActive ? "Activo" : "Desactivado"}
+          </div>
+          <Switch
+            isSelected={isActive}
+            onValueChange={setIsActive}
+            className="text-gray-700"
+          >
+            Modo activo
+          </Switch>
+        </div>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }
