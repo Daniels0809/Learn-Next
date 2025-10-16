@@ -24,11 +24,6 @@ export default function Home() {
     try {
       const loggedUser = await loginUser(user, pass);
 
-      if (!loggedUser.isActive) {
-        // Notification in English
-        notification("Your account is inactive", "error");
-        return;
-      }
 
       // Save to localStorage and context
       localStorage.setItem("userLogged", JSON.stringify(loggedUser));
@@ -39,10 +34,10 @@ export default function Home() {
       notification("Login successful", "success");
 
       // Redirection based on role
-      if (loggedUser.role === "admin") {
-        router.push("/library");
-      } else {
+      if (loggedUser.role === "user") {
         router.push("/dashboard");
+      } if(loggedUser.role === "admin") {
+        router.push("/library");
       }
     } catch (error: any) {
       notification(error.message, "error");

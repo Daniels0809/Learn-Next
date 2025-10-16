@@ -56,10 +56,6 @@ useEffect(() => {
 
     const user = JSON.parse(storedUser);
 
-    if (!user.isActive) {
-      router.push("/");
-      return;
-    }
 
     if (user.role !== "admin") {
       router.push("/dashboard");

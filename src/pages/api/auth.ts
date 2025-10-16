@@ -35,16 +35,20 @@ export default async function handler(
     if (req.method === "GET") {
       const { username, password } = req.query;
 
+      console.log({username, password});
+
       // Login (find by email + password)
       if (username && password) {
         const user = await Users.findOne({ username, password });
+        console.log(user)
 
         if (!user) {
+          console.log("User not found:", { username, password });
           return res
             .status(401)
             .json({ ok: false, message: "Credenciales incorrectas" });
         }
-
+        console.log("user found", user)
         return res.status(200).json({ ok: true, user });
       }
 
