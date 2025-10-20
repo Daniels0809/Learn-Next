@@ -8,18 +8,23 @@ interface ModalProps {
   description?: string;
   onCancel?: () => void;
   onSave?: () => void;
+  isOpen: boolean
 }
 
 
-export const Modal = ({title, onClose, children, description, onCancel, onSave}: ModalProps) => {
+export const Modal = ({title, onClose, children, description, onCancel, onSave, isOpen}: ModalProps) => {
     
     const handleClose = () => {
         onClose();
     }
-  
+    
+    if(!isOpen){
+        return null;
+    }
   
     return (
     <>
+
         <div className="modalContainer">
         <header className="modalContainer_header">
             <h2>{title}</h2>

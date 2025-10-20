@@ -4,7 +4,7 @@ import { Modal } from "@/components/button/modal/modal";
 import { MyContext } from "@/context/Context";
 import { Button, Switch } from "@heroui/react";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 const Dashboard = () => {
   const router = useRouter();
@@ -31,6 +31,16 @@ const Dashboard = () => {
   const handleSave = () => {
     console.log("save")
   }
+
+
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
+
+  const handleModal = () => {
+    const isOpenModal = true
+    
+  }
+
 
   return (
     <>
@@ -74,6 +84,7 @@ const Dashboard = () => {
       description="la description"
       onCancel={handleCancel}
       onSave={handleSave}
+      isOpen={handleModal}
       >
         <div>
           Contenido de children
