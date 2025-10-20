@@ -1,0 +1,37 @@
+.modalContainer{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 500px;
+    width: 500px;
+    background-color: blanchedalmond;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+
+.modalContainer_header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+
+.modalContainer_footer{
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 20px;
+    gap: 10px;
+
+}
+
+.modalContainer_buttons{
+    display: flex;
+    gap: 10px;   
+    position: relative;
+    
+}
+
+/** opacity, react icon, fondo diferente, darle funcionalidades
